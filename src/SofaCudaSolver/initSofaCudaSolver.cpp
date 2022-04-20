@@ -32,16 +32,10 @@ namespace component
 
 extern "C" {
 
-    SOFA_CUDASOLVER_API void initExternalModule();
-    SOFA_CUDASOLVER_APIconst char* getModuleName();
-    SOFA_CUDASOLVER_API const char* getModuleVersion();
-    SOFA_CUDASOLVER_API const char* getModuleLicense();
-    SOFA_CUDASOLVER_API const char* getModuleDescription();
-}
-
-const char* getModuleName()
-{
-    return "ISofaCudaSolverPlugin";
+    SOFACUDASOLVER_API void initExternalModule();
+    SOFACUDASOLVER_API const char* getModuleVersion();
+    SOFACUDASOLVER_API const char* getModuleLicense();
+    SOFACUDASOLVER_API const char* getModuleDescription();
 }
 
 const char* getModuleVersion()

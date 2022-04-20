@@ -21,7 +21,7 @@
 ******************************************************************************/
 #pragma once
 
-//#include "config.h"
+#include <SofaCudaSolver/config.h>
 
 #include <sofa/core/behavior/LinearSolver.h>
 #include <sofa/component/linearsolver/iterative/MatrixLinearSolver.h>
@@ -42,6 +42,8 @@ class CUDASparseCholeskySolver : public sofa::component::linearsolver::MatrixLin
 {
 public:
     SOFA_CLASS(SOFA_TEMPLATE2(CUDASparseCholeskySolver,TMatrix,TVector),SOFA_TEMPLATE2(sofa::component::linearsolver::MatrixLinearSolver,TMatrix,TVector));
+
+    Data<bool> f_verbose; ///< Dump system state at each iteration
 
     typedef TMatrix Matrix;
     typedef TVector Vector;
@@ -69,8 +71,8 @@ public:
     
 };
 
-#if  !defined(SOFA_COMPONENT_LINEARSOLVER_CUDASPARSECHOLESKYSOLVER_CPP)
-extern template class SOFA_COMPONENT_LINEARSOLVER_DIRECT_API CUDASparseCholeskySolver< sofa::linearalgebra::CompressedRowSparseMatrix<SReal>, sofa::linearalgebra::FullVector<SReal> >;
+#if  !defined(SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP)
+extern template class SOFACUDASOLVER_API CUDASparseCholeskySolver< sofa::linearalgebra::CompressedRowSparseMatrix<SReal>, sofa::linearalgebra::FullVector<SReal> > ;
 #endif
 
 } // namespace sofa::component::linearsolver::direct

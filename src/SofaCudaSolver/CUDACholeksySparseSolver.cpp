@@ -19,8 +19,8 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#define SOFA_COMPONENT_LINEARSOLVER_SPARSECHOLESKYSOLVER_CPP
-#include "CUDASCholeskySparseSolver.inl"
+#define SOFA_PLUGIN_SPARSECHOLESKYSOLVER_CPP
+#include "CUDACholeksySparseSolver.inl"
 #include <sofa/core/ObjectFactory.h>
 
 namespace sofa::component::linearsolver::direct
@@ -32,6 +32,6 @@ int CUDASparseCholeskySolverClass = core::RegisterObject("Direct linear solver b
         .add< CUDASparseCholeskySolver< CompressedRowSparseMatrix<SReal>,FullVector<SReal> > >()
         ;
 
-template class SOFA_COMPONENT_LINEARSOLVER_DIRECT_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<SReal>,FullVector<SReal> >;
+template class SOFACUDASOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<SReal>,FullVector<SReal> > ;
 
 } // namespace sofa::component::linearsolver::direct

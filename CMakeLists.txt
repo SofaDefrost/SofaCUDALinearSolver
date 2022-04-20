@@ -7,14 +7,18 @@ find_package(CUDA REQUIRED)
 # Find and load CMake configuration of packages containing this plugin's dependencies
 ## Mandatory dependencies
 find_package(SofaFramework REQUIRED) # Dependency to SofaBaseVisual
+sofa_find_package(Sofa.Component.LinearSolver.Iterative REQUIRED)
 
 # List all files
 set(SOFACUDASOLVER_SRC_DIR src/${PROJECT_NAME})
 set(HEADER_FILES
     ${SOFACUDASOLVER_SRC_DIR}/config.h.in
+    ${SOFACUDASOLVER_SRC_DIR}/CUDACholeksySparseSolver.h
+    ${SOFACUDASOLVER_SRC_DIR}/CUDACholeksySparseSolver.inl
     )
 set(SOURCE_FILES
     ${SOFACUDASOLVER_SRC_DIR}/initSofaCudaSolver.cpp
+    ${SOFACUDASOLVER_SRC_DIR}/CUDACholeksySparseSolver.cpp
     )
 set(README_FILES
     README.md
@@ -27,6 +31,7 @@ add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${README_FILE
 
 # Link the plugin library to its dependency(ies).
 target_link_libraries(${PROJECT_NAME} SofaFramework)
+target_link_libraries(${PROJECT_NAME} Sofa.Component.LinearSolver.Iterative)
 
 # Create package Config, Version & Target files.
 # Deploy the headers, resources, scenes & examples.

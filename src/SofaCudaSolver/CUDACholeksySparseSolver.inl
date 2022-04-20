@@ -21,7 +21,7 @@
 ******************************************************************************/
 #pragma once
 
-#include "CUDACHoleskySparseSolver.h"
+#include "CUDACholeksySparseSolver.h"
 #include <sofa/helper/ScopedAdvancedTimer.h>
 
 
@@ -29,20 +29,20 @@ namespace sofa::component::linearsolver::direct
 {
 
 template<class TMatrix , class TVector>
-CUDASparseCholeskySolver<TMAtrix,Tvector>::CUDASparseCholeskySolver()
+CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
     : f_verbose( initData(&f_verbose,false,"verbose","Dump system state at each iteration") )
     {}
 
 template<class TMatrix , class TVector>
-CUDASparseCholeskySolver<TMAtrix,Tvector>::~CUDASparseCholeskySolver()
+CUDASparseCholeskySolver<TMatrix,TVector>::~CUDASparseCholeskySolver()
 {}
 
 template<class TMatrix , class TVector>
-CUDASparseCholeskySolver<TMAtrix,Tvector>::solve(Matrix& M, Vector& x, Vector& b)
+void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vector& b)
 {}
 
 template<class TMatrix , class TVector>
-CUDASparseCholeskySolver<TMAtrix,Tvector>:; invert(Matrix& M)
+void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
 {}
 
 }// namespace sofa::component::linearsolver::direct
