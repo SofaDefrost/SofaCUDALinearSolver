@@ -31,7 +31,21 @@ namespace sofa::component::linearsolver::direct
 template<class TMatrix , class TVector>
 CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
     : f_verbose( initData(&f_verbose,false,"verbose","Dump system state at each iteration") )
-    {}
+    {
+        cusolverSpCreate(&handle);
+        cusparseCreate(&cusparseHandle);
+
+        cudaStreamCreate(&stream);
+
+        cusolverSpSetStream(handle, stream);
+        cusparseSetStream(cusparseHandle, stream);
+
+        cusparseCreateMatDescr(&descr);
+        cusparseSetMatType(descr, CUSPARSE_MATRIX_TYPE_GENERAL);
+
+        cusparseSetMatIndexBase(descr, CUSPARSE_INDEX_BASE_ZERO);
+
+    }
 
 template<class TMatrix , class TVector>
 CUDASparseCholeskySolver<TMatrix,TVector>::~CUDASparseCholeskySolver()

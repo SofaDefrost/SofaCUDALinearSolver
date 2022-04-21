@@ -31,7 +31,10 @@
 #include <sofa/helper/map.h>
 #include <cmath>
 
-#include"cusolverSp.h"
+#include <cusolverSp.h>
+#include <cusparse.h>
+#include <cuda_runtime.h>
+#include <cuda.h> 
 
 namespace sofa::component::linearsolver::direct
 {
@@ -62,6 +65,7 @@ public:
 
     cusolverSpHandle_t handle;
     cudaStream_t stream;
+    cusparseHandle_t cusparseHandle;
     cusparseMatDescr_t descr; 
    
     CUDASparseCholeskySolver();
