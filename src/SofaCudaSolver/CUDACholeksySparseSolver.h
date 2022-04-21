@@ -56,17 +56,42 @@ public:
     int colsA;///< number of columns
     int nnz;///< number of non zero elements
 
-    // csr format
-    type::vector<int> host_RowPtr; 
-    type::vector<int> host_ColsInd; 
-    type::vector<double> host_values;
+    int singularity;
+    double tol;
 
-    type::vector<double> host_perm;///< fill-in reducing permutation
+    // csr format
+    int* host_RowPtr; 
+    int* host_ColsInd; 
+    double* host_values;
+
+    int* device_RowPtr;
+    int* device_ColsInd;
+    double* device_values;
+
+    int* host_perm;///< fill-in reducing permutation
+    int* device_perm;
+    int* host_map;
+
+    int* host_RowPtrPermuted;
+    int* host_ColsIndPermuted;
+    double* host_valuesPermuted;
+
+    int* device_RowPtrPermuted;
+    int* device_ColsIndPermuted;
+    double* device_valuesPermuted;
 
     cusolverSpHandle_t handle;
     cudaStream_t stream;
     cusparseHandle_t cusparseHandle;
     cusparseMatDescr_t descr; 
+
+    double* device_x;
+    double* device_x_Permuted;
+    double* device_b;
+    double* device_b_Permuted;
+    double* host_b_Permuted;
+
+    void* buffer_cpu;
    
     CUDASparseCholeskySolver();
     ~CUDASparseCholeskySolver();
