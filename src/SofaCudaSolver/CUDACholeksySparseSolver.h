@@ -99,13 +99,21 @@ public:
     void* buffer_gpu;
    
     bool firstStep;
-    
+    bool notSameShape;
+
+    int previous_nnz;
+    sofa::type::vector<int> previous_ColsInd;
+    sofa::type::vector<int> previous_RowPtr;
+
     CUDASparseCholeskySolver();
     ~CUDASparseCholeskySolver();
     void solve (Matrix& M, Vector& x, Vector& b) override;
     void invert(Matrix& M) override;
     
 };
+
+bool compareMatrixShape(int, int *,int *, int, int *,int *) ;
+
 
 #define checkCudaErrors(err) __checkCudaErrors(err, __FILE__, __LINE__)
 
@@ -117,10 +125,15 @@ inline void __checkCudaErrors(cudaError err, const char *file, const int line) {
   }
 }
 
-inline void checksolver( cusolverStatus_t err){
-    if(err != 0)
+#define checksolver(status ) __checksolver(status, __FILE__, __LINE__)
+inline void __checksolver( cusolverStatus_t status, const char *file, const int line){
+    if(status != 0)
     {
+<<<<<<< HEAD
+        std::cout<< "Cuda Failure in" << file << " at line "<< line << std::endl;
+=======
         std::cout<< "Cuda Failure: " << err << std::endl;
+>>>>>>> 2d7c9ec0a9bae4295f76608764e188577cc7e0e8
         exit(EXIT_FAILURE);
     }
 }
