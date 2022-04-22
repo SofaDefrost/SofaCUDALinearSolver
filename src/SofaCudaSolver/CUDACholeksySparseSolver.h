@@ -47,8 +47,6 @@ class CUDASparseCholeskySolver : public sofa::component::linearsolver::MatrixLin
 public:
     SOFA_CLASS(SOFA_TEMPLATE2(CUDASparseCholeskySolver,TMatrix,TVector),SOFA_TEMPLATE2(sofa::component::linearsolver::MatrixLinearSolver,TMatrix,TVector));
 
-    Data<bool> f_verbose; ///< Dump system state at each iteration
-
     typedef TMatrix Matrix;
     typedef TVector Vector;
     typedef sofa::component::linearsolver::MatrixLinearSolver<TMatrix,TVector> Inherit;
@@ -122,7 +120,7 @@ inline void __checkCudaErrors(cudaError err, const char *file, const int line) {
 inline void checksolver( cusolverStatus_t err){
     if(err != 0)
     {
-        std::cout<< "Cuda Failure" << std::endl;
+        std::cout<< "Cuda Failure: " << err << std::endl;
         exit(EXIT_FAILURE);
     }
 }

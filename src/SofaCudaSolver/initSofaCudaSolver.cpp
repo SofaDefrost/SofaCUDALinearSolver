@@ -20,32 +20,42 @@
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
 #include <SofaCudaSolver/config.h>
-#include <sofa/helper/system/PluginManager.h>
-#include <sofa/helper/logging/Messaging.h>
+#include <sofa/core/ObjectFactory.h>
+using sofa::core::ObjectFactory;
 
-
-namespace sofa
-{
-
-namespace component
-{
 
 extern "C" {
 
     SOFACUDASOLVER_API void initExternalModule();
+    SOFACUDASOLVER_API const char* getModuleName();
     SOFACUDASOLVER_API const char* getModuleVersion();
     SOFACUDASOLVER_API const char* getModuleLicense();
     SOFACUDASOLVER_API const char* getModuleDescription();
+    SOFACUDASOLVER_API const char* getModuleComponentList();
 }
 
-const char* getModuleVersion()
+void initExternalModule()
 {
-    return "0.1";
+    static bool first = true;
+    if (first)
+    {
+        first = false;
+    }
+}
+
+const char* getModuleName()
+{
+    return sofa_tostring(SOFA_TARGET);
 }
 
 const char* getModuleLicense()
 {
-    return "Undefined";
+    return "";
+}
+
+const char* getModuleVersion()
+{
+    return sofa_tostring(SOFACUDASOLVER_VERSION);
 }
 
 const char* getModuleDescription()
@@ -53,6 +63,9 @@ const char* getModuleDescription()
     return "Linear solver with resolution on GPU";
 }
 
-}
-
+const char* getModuleComponentList()
+{
+    /// string containing the names of the classes provided by the plugin
+    static std::string classes = ObjectFactory::getInstance()->listClassesFromTarget(sofa_tostring(SOFA_TARGET));
+    return classes.c_str();
 }

@@ -20,7 +20,7 @@
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
 #define SOFA_PLUGIN_SPARSECHOLESKYSOLVER_CPP
-#include "CUDACholeksySparseSolver.inl"
+#include <SofaCudaSolver/CUDACholeksySparseSolver.inl>
 #include <sofa/core/ObjectFactory.h>
 
 namespace sofa::component::linearsolver::direct
