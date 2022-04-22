@@ -100,6 +100,8 @@ public:
 
     void* buffer_gpu;
    
+    bool firstStep;
+    
     CUDASparseCholeskySolver();
     ~CUDASparseCholeskySolver();
     void solve (Matrix& M, Vector& x, Vector& b) override;

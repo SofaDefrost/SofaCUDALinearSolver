@@ -78,44 +78,38 @@ CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
         size_internal = 0;
         size_work = 0;
 
+        firstStep = true;
+
     }
 
 template<class TMatrix , class TVector>
 CUDASparseCholeskySolver<TMatrix,TVector>::~CUDASparseCholeskySolver()
-{}
-
-template<class TMatrix , class TVector>
-void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vector& b)
 {
-    
-    checkCudaErrors(cudaMalloc(&device_x, sizeof(double)*colsA));
-    checkCudaErrors(cudaMalloc(&device_b, sizeof(double)*colsA));
-    
-    checkCudaErrors(cudaMemcpyAsync(device_b, (double*)b.ptr(), sizeof(double)*colsA, cudaMemcpyHostToDevice, stream));
-    checkCudaErrors(cudaMemcpyAsync(device_x, (double*)x.ptr(),sizeof(double)*colsA, cudaMemcpyHostToDevice, stream));
-   
-    cudaDeviceSynchronize();
-
-/*
-    int reorder = 0 ;
-    
-    checksolver(cusolverSpDcsrlsvchol(
-        handle, rowsA, nnz, descr, device_values, device_RowPtr,
-        device_ColsInd, device_b , tol, reorder, device_x,
-        &singularity));
-*/
-    checksolver( cusolverSpDcsrcholSolve( handle, rowsA, device_b, device_x, device_info, buffer_gpu ) );
-    
-    checkCudaErrors(cudaDeviceSynchronize());
-
-    checkCudaErrors( cudaMemcpyAsync( (double*)x.ptr(), device_x, sizeof(double)*colsA, cudaMemcpyDeviceToHost,stream));
-
     checkCudaErrors(cudaFree(device_x));
     checkCudaErrors(cudaFree(device_b));
     checkCudaErrors(cudaFree(device_RowPtr));
     checkCudaErrors(cudaFree(device_ColsInd));
     checkCudaErrors(cudaFree(device_values));
     checkCudaErrors(cudaFree(device_perm));
+}
+
+template<class TMatrix , class TVector>
+void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vector& b)
+{
+    
+    checkCudaErrors(cudaMemcpyAsync(device_b, (double*)b.ptr(), sizeof(double)*colsA, cudaMemcpyHostToDevice, stream));
+    checkCudaErrors(cudaMemcpyAsync(device_x, (double*)x.ptr(),sizeof(double)*colsA, cudaMemcpyHostToDevice, stream));
+   
+    cudaDeviceSynchronize();
+
+    {
+        sofa::helper::ScopedAdvancedTimer solveTimer("Solve");
+        checksolver( cusolverSpDcsrcholSolve( handle, rowsA, device_b, device_x, device_info, buffer_gpu ) );
+    }
+
+    checkCudaErrors(cudaDeviceSynchronize());
+
+    checkCudaErrors( cudaMemcpyAsync( (double*)x.ptr(), device_x, sizeof(double)*colsA, cudaMemcpyDeviceToHost,stream));
 
 }
 
@@ -131,13 +125,23 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
    host_ColsInd = (int*) M.getColsIndex().data();
    host_values = (double*) M.getColsValue().data();
 
-    //  allow memory on device
-    checkCudaErrors(cudaMalloc( &device_RowPtr, sizeof(int)*( rowsA +1) ));
+
+    if(firstStep)
+    {
+        //  allow memory on device
+        checkCudaErrors(cudaMalloc( &device_RowPtr, sizeof(int)*( rowsA +1) ));
+
+        checkCudaErrors(cudaMalloc(&device_perm, sizeof(double)*(colsA) ));
+
+        checkCudaErrors(cudaMalloc(&device_x, sizeof(double)*colsA));
+        checkCudaErrors(cudaMalloc(&device_b, sizeof(double)*colsA));
+
+        firstStep = false;
+    }
+    if(device_ColsInd) cudaFree(device_ColsInd);
     checkCudaErrors(cudaMalloc( &device_ColsInd, sizeof(int)*nnz ));
+    if(device_values) cudaFree(device_values);
     checkCudaErrors(cudaMalloc( &device_values, sizeof(double)*nnz ));
-
-    checkCudaErrors(cudaMalloc(&device_perm, sizeof(double)*(colsA) ));
-
     // send data to the device
     checkCudaErrors( cudaMemcpyAsync( device_RowPtr, host_RowPtr, sizeof(int)*(rowsA+1), cudaMemcpyHostToDevice, stream) );
     checkCudaErrors( cudaMemcpyAsync( device_ColsInd, host_ColsInd, sizeof(int)*nnz, cudaMemcpyHostToDevice, stream ) );
@@ -147,17 +151,21 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
  
     // factorize on device
     checksolver(cusolverSpCreateCsrcholInfo(&device_info));
-    checksolver( cusolverSpXcsrcholAnalysis( handle, rowsA, nnz, descr, device_RowPtr, device_ColsInd, device_info ) ); // symbolic decomposition
-
+    {
+        sofa::helper::ScopedAdvancedTimer symbolicTimer("Symbolic factorization");
+        checksolver( cusolverSpXcsrcholAnalysis( handle, rowsA, nnz, descr, device_RowPtr, device_ColsInd, device_info ) ); // symbolic decomposition
+    }
+       
     checksolver( cusolverSpDcsrcholBufferInfo( handle, rowsA, nnz, descr, device_values, device_RowPtr, device_ColsInd,
                                              device_info, &size_internal, &size_work ) ); //set workspace
-
+    
     if(buffer_gpu) cudaFree(buffer_gpu);
     checkCudaErrors(cudaMalloc(&buffer_gpu, sizeof(char)*size_work));
-
-    checksolver(cusolverSpDcsrcholFactor( handle, rowsA, nnz, descr, device_values, device_RowPtr, device_ColsInd,
+    {
+        sofa::helper::ScopedAdvancedTimer numericTimer("Numeric factorization");
+        checksolver(cusolverSpDcsrcholFactor( handle, rowsA, nnz, descr, device_values, device_RowPtr, device_ColsInd,
                             device_info, buffer_gpu )); // numeric decomposition
-    
+    }
 
     // compute fill reducing permutation
     
