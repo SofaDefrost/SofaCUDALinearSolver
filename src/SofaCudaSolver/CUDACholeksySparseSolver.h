@@ -31,7 +31,8 @@
 #include <sofa/helper/map.h>
 #include <cmath>
 
-#include <cusolverSp.h>
+#include "cusolverSp.h"
+#include "cusolverSp_LOWLEVEL_PREVIEW.h"
 #include <cusparse.h>
 #include <cuda_runtime.h>
 #include <cuda.h> 
@@ -83,7 +84,12 @@ public:
     cusolverSpHandle_t handle;
     cudaStream_t stream;
     cusparseHandle_t cusparseHandle;
-    cusparseMatDescr_t descr; 
+    cusparseMatDescr_t descr;
+
+    csrcholInfo_t device_info ;
+
+    size_t size_internal;
+    size_t size_work;
 
     double* device_x;
     double* device_x_Permuted;
@@ -92,7 +98,7 @@ public:
     double* device_b_Permuted;
     double* host_b_Permuted;
 
-    void* buffer_cpu;
+    void* buffer_gpu;
    
     CUDASparseCholeskySolver();
     ~CUDASparseCholeskySolver();

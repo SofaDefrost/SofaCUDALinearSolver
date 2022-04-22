@@ -42,7 +42,6 @@ CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
 
         cusparseCreateMatDescr(&descr);
         cusparseSetMatType(descr, CUSPARSE_MATRIX_TYPE_GENERAL);
-
         cusparseSetMatIndexBase(descr, CUSPARSE_INDEX_BASE_ZERO);
 
         host_RowPtr = nullptr; 
@@ -51,25 +50,33 @@ CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
         device_RowPtr = nullptr;
         device_ColsInd = nullptr;
         device_values = nullptr;
+
         host_perm = nullptr;
         device_perm = nullptr;
         host_map = nullptr;
+
         host_RowPtrPermuted = nullptr;
         host_ColsIndPermuted = nullptr;
         host_valuesPermuted = nullptr;
         device_RowPtrPermuted = nullptr;
         device_ColsIndPermuted = nullptr;
         device_valuesPermuted = nullptr;
+
         device_x = nullptr;
         host_x_Permuted = nullptr;
         device_x_Permuted = nullptr;
         device_b = nullptr;
         device_b_Permuted = nullptr;
         host_b_Permuted = nullptr;
-        buffer_cpu = nullptr;
+
+        buffer_gpu = nullptr;
+        device_info = nullptr;
 
         singularity = 0;
         tol = 0.000001;
+
+        size_internal = 0;
+        size_work = 0;
 
     }
 
@@ -89,16 +96,19 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
    
     cudaDeviceSynchronize();
 
+/*
     int reorder = 0 ;
     
     checksolver(cusolverSpDcsrlsvchol(
         handle, rowsA, nnz, descr, device_values, device_RowPtr,
         device_ColsInd, device_b , tol, reorder, device_x,
         &singularity));
+*/
+    checksolver( cusolverSpDcsrcholSolve( handle, rowsA, device_b, device_x, device_info, buffer_gpu ) );
     
     checkCudaErrors(cudaDeviceSynchronize());
 
-    checkCudaErrors( cudaMemcpy( (double*)x.ptr(), device_x, sizeof(double)*colsA, cudaMemcpyDeviceToHost));
+    checkCudaErrors( cudaMemcpyAsync( (double*)x.ptr(), device_x, sizeof(double)*colsA, cudaMemcpyDeviceToHost,stream));
 
     checkCudaErrors(cudaFree(device_x));
     checkCudaErrors(cudaFree(device_b));
@@ -119,10 +129,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
    // copy the matrix
    host_RowPtr = (int*) M.getRowBegin().data();
    host_ColsInd = (int*) M.getColsIndex().data();
-
-   if(host_values) free(host_values);
-   host_values = (double*)malloc(sizeof(double)*nnz);
-   for(int i=0; i<nnz ; i++) host_values[i] = (double) M.getColsValue()[i];
+   host_values = (double*) M.getColsValue().data();
 
     //  allow memory on device
     checkCudaErrors(cudaMalloc( &device_RowPtr, sizeof(int)*( rowsA +1) ));
@@ -138,6 +145,20 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
 
     cudaDeviceSynchronize();
  
+    // factorize on device
+    checksolver(cusolverSpCreateCsrcholInfo(&device_info));
+    checksolver( cusolverSpXcsrcholAnalysis( handle, rowsA, nnz, descr, device_RowPtr, device_ColsInd, device_info ) ); // symbolic decomposition
+
+    checksolver( cusolverSpDcsrcholBufferInfo( handle, rowsA, nnz, descr, device_values, device_RowPtr, device_ColsInd,
+                                             device_info, &size_internal, &size_work ) ); //set workspace
+
+    if(buffer_gpu) cudaFree(buffer_gpu);
+    checkCudaErrors(cudaMalloc(&buffer_gpu, sizeof(char)*size_work));
+
+    checksolver(cusolverSpDcsrcholFactor( handle, rowsA, nnz, descr, device_values, device_RowPtr, device_ColsInd,
+                            device_info, buffer_gpu )); // numeric decomposition
+    
+
     // compute fill reducing permutation
     
     // to-do : add the choice for the permutations
