@@ -1,18 +1,13 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.17)
 project(SofaCudaSolver VERSION 1.0 LANGUAGES CXX)
 
 
 # Find and load CMake configuration of packages containing this plugin's dependencies
 ## Mandatory dependencies
-find_package(SofaFramework REQUIRED) # Dependency to SofaBaseVisual
+find_package(SofaFramework REQUIRED)
 sofa_find_package(Sofa.Component.LinearSolver.Iterative REQUIRED)
 find_package(CUDA REQUIRED)
-
-#find_package(CUDASparse REQUIRED)
-#find_package(CUDASolver REQUIRED)
-find_library(cusolver cusolver HINTS "/usr/lib/x86_64-linux-gnu/libcusolver.so")
-find_library(cusparse cusparse HINTS "/usr/lib/x86_64-linux-gnu/libcusparse.so")
-
+find_package(CUDAToolkit REQUIRED)
 
 # List all files
 set(SOFACUDASOLVER_SRC_DIR src/${PROJECT_NAME})
@@ -38,10 +33,7 @@ cuda_add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${README
 # Link the plugin library to its dependency(ies).
 target_link_libraries(${PROJECT_NAME} SofaFramework)
 target_link_libraries(${PROJECT_NAME} Sofa.Component.LinearSolver.Iterative)
-#target_link_libraries(${PROJECT_NAME} ${CUDA_SPARSE_LIBRARY})
-#target_link_libraries(${PROJECT_NAME} ${CUDA_SOLVER_LIBRARY})
-target_link_libraries(${PROJECT_NAME} cusolver)
-target_link_libraries(${PROJECT_NAME} cusparse)
+target_link_libraries(${PROJECT_NAME} CUDA::cudart CUDA::cusparse CUDA::cusolver)
 
 target_include_directories(${PROJECT_NAME} PUBLIC "/usr/include/cuda/")
 
