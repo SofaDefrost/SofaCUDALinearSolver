@@ -129,11 +129,7 @@ inline void __checkCudaErrors(cudaError err, const char *file, const int line) {
 inline void __checksolver( cusolverStatus_t status, const char *file, const int line){
     if(status != 0)
     {
-<<<<<<< HEAD
         std::cout<< "Cuda Failure in" << file << " at line "<< line << std::endl;
-=======
-        std::cout<< "Cuda Failure: " << err << std::endl;
->>>>>>> 2d7c9ec0a9bae4295f76608764e188577cc7e0e8
         exit(EXIT_FAILURE);
     }
 }
