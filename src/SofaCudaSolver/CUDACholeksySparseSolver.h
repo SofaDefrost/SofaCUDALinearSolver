@@ -87,6 +87,7 @@ public:
 
     double* device_x;
     double* device_x_Permuted;
+    double* host_x_Permuted;
     double* device_b;
     double* device_b_Permuted;
     double* host_b_Permuted;
@@ -99,6 +100,24 @@ public:
     void invert(Matrix& M) override;
     
 };
+
+#define checkCudaErrors(err) __checkCudaErrors(err, __FILE__, __LINE__)
+
+inline void __checkCudaErrors(cudaError err, const char *file, const int line) {
+  if (cudaSuccess != err) {
+    fprintf(stderr, "%s(%i) : CUDA Runtime API error %d: %s.\n", file, line,
+            (int)err, cudaGetErrorString(err));
+    exit(EXIT_FAILURE);
+  }
+}
+
+inline void checksolver( cusolverStatus_t err){
+    if(err != 0)
+    {
+        std::cout<< "Cuda Failure" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+}
 
 #if  !defined(SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP)
 extern template class SOFACUDASOLVER_API CUDASparseCholeskySolver< sofa::linearalgebra::CompressedRowSparseMatrix<SReal>, sofa::linearalgebra::FullVector<SReal> > ;
