@@ -78,7 +78,7 @@ CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
         size_internal = 0;
         size_work = 0;
 
-        firstStep = true;
+        //firstStep = true;
         notSameShape = true;
 
         nnz = 0;
@@ -103,9 +103,10 @@ CUDASparseCholeskySolver<TMatrix,TVector>::~CUDASparseCholeskySolver()
 template<class TMatrix , class TVector>
 void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vector& b)
 {
+    int n = M.colBSize(); 
     
-    checkCudaErrors(cudaMemcpyAsync(device_b, (double*)b.ptr(), sizeof(double)*colsA, cudaMemcpyHostToDevice, stream));
-    checkCudaErrors(cudaMemcpyAsync(device_x, (double*)x.ptr(),sizeof(double)*colsA, cudaMemcpyHostToDevice, stream));
+    checkCudaErrors(cudaMemcpyAsync(device_b, (double*)b.ptr(), sizeof(double)*n, cudaMemcpyHostToDevice, stream));
+    checkCudaErrors(cudaMemcpyAsync(device_x, (double*)x.ptr(),sizeof(double)*n, cudaMemcpyHostToDevice, stream));
    
     cudaDeviceSynchronize();
 
@@ -125,17 +126,25 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
 template<class TMatrix , class TVector>
 void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
 {
+    free(handle);
+    free(stream);
+    cusolverSpCreate(&handle);
+    cudaStreamCreate(&stream);
+    cusolverSpSetStream(handle, stream);
+    cusparseSetStream(cusparseHandle, stream);
+
     M.compress();
-    if(firstStep)
-    {
+    //if(firstStep)
+    //{
         rowsA = M.rowBSize();
         colsA = M.colBSize();
 
         previous_RowPtr.resize( rowsA + 1 );
-    }
+    //}
 
     previous_nnz = nnz ;
     previous_ColsInd.resize( nnz );
+    
     /*
     if(!firstStep)
     {
@@ -143,6 +152,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
         for(int i=0; i<rowsA +1 ; i++ ) previous_RowPtr[i] = host_RowPtr[i];
     }
     */
+    
 
     nnz = M.getColsValue().size(); // number of non zero coefficients
 
@@ -152,11 +162,11 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
     host_values = (double*) M.getColsValue().data();
 
 
-    //if (!firstStep) notSameShape = compareMatrixShape( nnz, host_ColsInd, host_RowPtr, previous_nnz, previous_ColsInd.data(), previous_RowPtr.data() );
-    // always true?
-    if(firstStep)
-    {
-        //  allow memory on device
+    //if (!firstStep) notSameShape = compareMatrixShape( rowsA, host_ColsInd, host_RowPtr, previous_RowPtr.size()-1 , previous_ColsInd.data(), previous_RowPtr.data() );
+
+   // if(firstStep)
+    //{
+    //  allow memory on device
         checkCudaErrors(cudaMalloc( &device_RowPtr, sizeof(int)*( rowsA +1) ));
 
         checkCudaErrors(cudaMalloc(&device_perm, sizeof(double)*(colsA) ));
@@ -165,7 +175,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
         checkCudaErrors(cudaMalloc(&device_b, sizeof(double)*colsA));
 
         firstStep = false;
-    }
+    //}
 
     //if(notSameShape)
     //{
@@ -179,6 +189,11 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
         checkCudaErrors( cudaMemcpyAsync( device_values, host_values, sizeof(double)*nnz, cudaMemcpyHostToDevice, stream ) );
 
         cudaDeviceSynchronize();
+        /*
+        int issym;
+        cusolverSpXcsrissymHost(handle, colsA, nnz, descr, host_RowPtr, host_RowPtr+1, host_ColsInd, &issym);
+        std::cout << issym << std::endl;
+        */
     
         // factorize on device
         if(device_info) cudaFree(device_info);
