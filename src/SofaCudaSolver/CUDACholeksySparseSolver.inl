@@ -47,27 +47,13 @@ CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
         host_RowPtr = nullptr; 
         host_ColsInd = nullptr; 
         host_values = nullptr;
+
         device_RowPtr = nullptr;
         device_ColsInd = nullptr;
         device_values = nullptr;
 
-        host_perm = nullptr;
-        device_perm = nullptr;
-        host_map = nullptr;
-
-        host_RowPtrPermuted = nullptr;
-        host_ColsIndPermuted = nullptr;
-        host_valuesPermuted = nullptr;
-        device_RowPtrPermuted = nullptr;
-        device_ColsIndPermuted = nullptr;
-        device_valuesPermuted = nullptr;
-
         device_x = nullptr;
-        host_x_Permuted = nullptr;
-        device_x_Permuted = nullptr;
         device_b = nullptr;
-        device_b_Permuted = nullptr;
-        host_b_Permuted = nullptr;
 
         buffer_gpu = nullptr;
         device_info = nullptr;
@@ -83,7 +69,7 @@ CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
 
         nnz = 0;
 
-        previous_nnz = 0 ;
+        previous_n = 0 ;
         previous_ColsInd.clear() ;
         previous_RowPtr.clear() ;
 
@@ -97,7 +83,6 @@ CUDASparseCholeskySolver<TMatrix,TVector>::~CUDASparseCholeskySolver()
     checkCudaErrors(cudaFree(device_RowPtr));
     checkCudaErrors(cudaFree(device_ColsInd));
     checkCudaErrors(cudaFree(device_values));
-    checkCudaErrors(cudaFree(device_perm));
 }
 
 template<class TMatrix , class TVector>
@@ -121,91 +106,77 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
 
     cudaDeviceSynchronize();
 
+    //cusolverSpDestroy(handle);
+
 }
 
 template<class TMatrix , class TVector>
 void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
 {
-    free(handle);
-    free(stream);
+    /*
+    cudaFree(handle);
+    cudaFree(stream);
     cusolverSpCreate(&handle);
     cudaStreamCreate(&stream);
     cusolverSpSetStream(handle, stream);
     cusparseSetStream(cusparseHandle, stream);
+    */
 
     M.compress();
-    //if(firstStep)
-    //{
-        rowsA = M.rowBSize();
-        colsA = M.colBSize();
 
-        previous_RowPtr.resize( rowsA + 1 );
-    //}
-
-    previous_nnz = nnz ;
-    previous_ColsInd.resize( nnz );
+    previous_n = rowsA ;
+    rowsA = M.rowBSize();
+    colsA = M.colBSize();
     
-    /*
-    if(!firstStep)
-    {
-        for(int i=0; i<nnz; i++) previous_ColsInd[i] = host_ColsInd[i];
-        for(int i=0; i<rowsA +1 ; i++ ) previous_RowPtr[i] = host_RowPtr[i];
-    }
-    */
-    
-
     nnz = M.getColsValue().size(); // number of non zero coefficients
+
 
     // copy the matrix
     host_RowPtr = (int*) M.getRowBegin().data();
     host_ColsInd = (int*) M.getColsIndex().data();
     host_values = (double*) M.getColsValue().data();
 
+   
+    //notSameShape = compareMatrixShape(rowsA, host_ColsInd, host_RowPtr, previous_RowPtr.size()-1,  previous_ColsInd.data(), previous_RowPtr.data() );
+    //std::cout<< notSameShape << std::endl;
+    //std::cout<< previous_ColsInd[previous_ColsInd.size()-1] << ' ' << previous_RowPtr[previous_RowPtr.size()-1] << std::endl;
+    //std::cout << host_RowPtr[rowsA] << ' ' << host_ColsInd[nnz-1] << std::endl;
 
-    //if (!firstStep) notSameShape = compareMatrixShape( rowsA, host_ColsInd, host_RowPtr, previous_RowPtr.size()-1 , previous_ColsInd.data(), previous_RowPtr.data() );
+    checkCudaErrors(cudaMalloc( &device_RowPtr, sizeof(int)*( rowsA +1) ));
 
-   // if(firstStep)
-    //{
-    //  allow memory on device
-        checkCudaErrors(cudaMalloc( &device_RowPtr, sizeof(int)*( rowsA +1) ));
+    checkCudaErrors(cudaMalloc(&device_x, sizeof(double)*colsA));
+    checkCudaErrors(cudaMalloc(&device_b, sizeof(double)*colsA));
 
-        checkCudaErrors(cudaMalloc(&device_perm, sizeof(double)*(colsA) ));
+    firstStep = false;
 
-        checkCudaErrors(cudaMalloc(&device_x, sizeof(double)*colsA));
-        checkCudaErrors(cudaMalloc(&device_b, sizeof(double)*colsA));
 
-        firstStep = false;
-    //}
+    if(device_ColsInd) cudaFree(device_ColsInd);
+    checkCudaErrors(cudaMalloc( &device_ColsInd, sizeof(int)*nnz ));
+    if(device_values) cudaFree(device_values);
+    checkCudaErrors(cudaMalloc( &device_values, sizeof(double)*nnz ));
+    
+    // send data to the device
+    checkCudaErrors( cudaMemcpyAsync( device_RowPtr, host_RowPtr, sizeof(int)*(rowsA+1), cudaMemcpyHostToDevice, stream) );
+    checkCudaErrors( cudaMemcpyAsync( device_ColsInd, host_ColsInd, sizeof(int)*nnz, cudaMemcpyHostToDevice, stream ) );
+    checkCudaErrors( cudaMemcpyAsync( device_values, host_values, sizeof(double)*nnz, cudaMemcpyHostToDevice, stream ) );
 
-    //if(notSameShape)
-    //{
-        if(device_ColsInd) cudaFree(device_ColsInd);
-        checkCudaErrors(cudaMalloc( &device_ColsInd, sizeof(int)*nnz ));
-        if(device_values) cudaFree(device_values);
-        checkCudaErrors(cudaMalloc( &device_values, sizeof(double)*nnz ));
-        // send data to the device
-        checkCudaErrors( cudaMemcpyAsync( device_RowPtr, host_RowPtr, sizeof(int)*(rowsA+1), cudaMemcpyHostToDevice, stream) );
-        checkCudaErrors( cudaMemcpyAsync( device_ColsInd, host_ColsInd, sizeof(int)*nnz, cudaMemcpyHostToDevice, stream ) );
-        checkCudaErrors( cudaMemcpyAsync( device_values, host_values, sizeof(double)*nnz, cudaMemcpyHostToDevice, stream ) );
-
-        cudaDeviceSynchronize();
+    cudaDeviceSynchronize();
         /*
         int issym;
         cusolverSpXcsrissymHost(handle, colsA, nnz, descr, host_RowPtr, host_RowPtr+1, host_ColsInd, &issym);
         std::cout << issym << std::endl;
         */
     
-        // factorize on device
-        if(device_info) cudaFree(device_info);
-        checksolver(cusolverSpCreateCsrcholInfo(&device_info));
-        {
-            sofa::helper::ScopedAdvancedTimer symbolicTimer("Symbolic factorization");
-            checksolver( cusolverSpXcsrcholAnalysis( handle, rowsA, nnz, descr, device_RowPtr, device_ColsInd, device_info ) ); // symbolic decomposition
-        }
+    // factorize on device
+    if(device_info) cudaFree(device_info);
+    checksolver(cusolverSpCreateCsrcholInfo(&device_info));
+    {
+        sofa::helper::ScopedAdvancedTimer symbolicTimer("Symbolic factorization");
+        checksolver( cusolverSpXcsrcholAnalysis( handle, rowsA, nnz, descr, device_RowPtr, device_ColsInd, device_info ) ); // symbolic decomposition
+    }
         
-        checksolver( cusolverSpDcsrcholBufferInfo( handle, rowsA, nnz, descr, device_values, device_RowPtr, device_ColsInd,
-                                                device_info, &size_internal, &size_work ) ); //set workspace
-    //}
+    checksolver( cusolverSpDcsrcholBufferInfo( handle, rowsA, nnz, descr, device_values, device_RowPtr, device_ColsInd,
+                                            device_info, &size_internal, &size_work ) ); //set workspace
     
     if(buffer_gpu) cudaFree(buffer_gpu);
     checkCudaErrors(cudaMalloc(&buffer_gpu, sizeof(char)*size_work));
@@ -214,6 +185,13 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
         checksolver(cusolverSpDcsrcholFactor( handle, rowsA, nnz, descr, device_values, device_RowPtr, device_ColsInd,
                             device_info, buffer_gpu )); // numeric decomposition
     }
+
+    //store the shape of the matrix
+    previous_RowPtr.resize( rowsA + 1 );
+    previous_ColsInd.resize( nnz );
+    previous_ColsInd.resize(nnz);
+    for(int i=0;i<nnz;i++) previous_ColsInd[i] = host_ColsInd[i];
+    for(int i=0; i<rowsA +1; i++) previous_RowPtr[i] = host_RowPtr[i];
 
     // compute fill reducing permutation
     
@@ -225,16 +203,19 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
 
 bool compareMatrixShape(int s_M, int * M_colptr,int * M_rowind, int s_P, int * P_colptr,int * P_rowind) {
     if (s_M != s_P) return true;
-    if (M_colptr[s_M] != P_colptr[s_M] ) return true;
+    //std::cout << 1.1 <<std::endl;
+    if (M_colptr[s_M] != P_colptr[s_M] ) return true; 
+    //std::cout << 1.2 <<std::endl;
 
     for (int i=0;i<s_P;i++) {
-        if (M_colptr[i]!=P_colptr[i]) return true;
+        if (M_colptr[i]!=P_colptr[i]) return true; 
     }
+    //std::cout << 1.3 <<std::endl;
 
     for (int i=0;i<M_colptr[s_M];i++) {
         if (M_rowind[i]!=P_rowind[i]) return true;
     }
-
+    //std::cout << 1.3 <<std::endl;
     return false;
 }
 

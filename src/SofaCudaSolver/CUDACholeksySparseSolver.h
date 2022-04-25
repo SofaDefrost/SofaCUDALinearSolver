@@ -67,18 +67,6 @@ public:
     int* device_ColsInd;
     double* device_values;
 
-    int* host_perm;///< fill-in reducing permutation
-    int* device_perm;
-    int* host_map;
-
-    int* host_RowPtrPermuted;
-    int* host_ColsIndPermuted;
-    double* host_valuesPermuted;
-
-    int* device_RowPtrPermuted;
-    int* device_ColsIndPermuted;
-    double* device_valuesPermuted;
-
     cusolverSpHandle_t handle;
     cudaStream_t stream;
     cusparseHandle_t cusparseHandle;
@@ -90,18 +78,14 @@ public:
     size_t size_work;
 
     double* device_x;
-    double* device_x_Permuted;
-    double* host_x_Permuted;
     double* device_b;
-    double* device_b_Permuted;
-    double* host_b_Permuted;
 
     void* buffer_gpu;
    
     bool firstStep;
     bool notSameShape;
 
-    int previous_nnz;
+    int previous_n;
     sofa::type::vector<int> previous_ColsInd;
     sofa::type::vector<int> previous_RowPtr;
 
@@ -129,7 +113,7 @@ inline void __checkCudaErrors(cudaError err, const char *file, const int line) {
 inline void __checksolver( cusolverStatus_t status, const char *file, const int line){
     if(status != 0)
     {
-        std::cout<< "Cuda Failure in" << file << " at line "<< line << std::endl;
+        std::cout<<'\n'<< "Cuda Failure in" << file << " at line "<< line <<'\n'<< std::endl;
         exit(EXIT_FAILURE);
     }
 }
