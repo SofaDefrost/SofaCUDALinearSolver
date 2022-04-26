@@ -96,7 +96,7 @@ public:
     void invert(Matrix& M) override;
     
 };
-
+// compare the shape of 2 matrix given in csr format, return true if the don't have the same shape
 bool compareMatrixShape(const int,const int *,const int *,const int,const int *,const int *) ;
 
 

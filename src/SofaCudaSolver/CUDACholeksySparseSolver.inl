@@ -133,7 +133,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
 
    
     notSameShape = compareMatrixShape(rowsA , host_ColsInd, host_RowPtr, previous_RowPtr.size()-1,  previous_ColsInd.data(), previous_RowPtr.data() );
-    std::cout<< notSameShape << std::endl;
+    //std::cout<< notSameShape << std::endl;
     //std::cout << rowsA << ' ' << previous_RowPtr.size() << std::endl;
     //std::cout<< previous_ColsInd[previous_ColsInd.size()-1] << ' ' << previous_RowPtr[previous_RowPtr.size()-1] << std::endl;
     //std::cout << host_RowPtr[rowsA+1] << ' ' << host_ColsInd[nnz-1] << std::endl;
@@ -163,7 +163,6 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
     cudaDeviceSynchronize();
     
     // factorize on device
-    notSameShape = true; 
     if(notSameShape)
     {
         if(device_info) cusolverSpDestroyCsrcholInfo(device_info);
@@ -206,19 +205,13 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
 
 bool compareMatrixShape(const int s_M,const int * M_colind,const int * M_rowptr,const int s_P,const int * P_colind,const int * P_rowptr) {
     if (s_M != s_P) return true;
-    //std::cout << 1.1 <<std::endl;
     if (M_rowptr[s_M] != P_rowptr[s_M] ) return true; 
-    //std::cout << 1.2 <<std::endl;
-
     for (int i=0;i<s_P;i++) {
         if (M_rowptr[i]!=P_rowptr[i]) return true; 
     }
-    //std::cout << 1.3 <<std::endl;
-
     for (int i=0;i<M_rowptr[s_M];i++) {
         if (M_colind[i]!=P_colind[i]) return true;
     }
-    //std::cout << 1.3 <<std::endl;
     return false;
 }
 
