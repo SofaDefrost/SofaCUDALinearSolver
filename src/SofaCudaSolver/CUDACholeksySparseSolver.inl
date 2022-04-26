@@ -83,6 +83,11 @@ CUDASparseCholeskySolver<TMatrix,TVector>::~CUDASparseCholeskySolver()
     checkCudaErrors(cudaFree(device_RowPtr));
     checkCudaErrors(cudaFree(device_ColsInd));
     checkCudaErrors(cudaFree(device_values));
+
+    cusolverSpDestroy(handle);
+    cusolverSpDestroyCsrcholInfo(device_info);
+    cusparseDestroyMatDescr(descr);
+    cudaStreamDestroy(stream);
 }
 
 template<class TMatrix , class TVector>
@@ -168,7 +173,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
         */
     
     // factorize on device
-    if(device_info) cudaFree(device_info);
+    if(device_info) cusolverSpDestroyCsrcholInfo(device_info);
     checksolver(cusolverSpCreateCsrcholInfo(&device_info));
     {
         sofa::helper::ScopedAdvancedTimer symbolicTimer("Symbolic factorization");
