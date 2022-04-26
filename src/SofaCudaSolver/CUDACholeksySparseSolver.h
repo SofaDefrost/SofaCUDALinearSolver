@@ -82,10 +82,11 @@ public:
 
     void* buffer_gpu;
    
-    bool firstStep;
     bool notSameShape;
 
     int previous_n;
+    int previous_nnz;
+
     sofa::type::vector<int> previous_ColsInd;
     sofa::type::vector<int> previous_RowPtr;
 
@@ -96,7 +97,7 @@ public:
     
 };
 
-bool compareMatrixShape(int, int *,int *, int, int *,int *) ;
+bool compareMatrixShape(const int,const int *,const int *,const int,const int *,const int *) ;
 
 
 #define checkCudaErrors(err) __checkCudaErrors(err, __FILE__, __LINE__)
