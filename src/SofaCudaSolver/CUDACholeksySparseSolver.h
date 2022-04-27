@@ -35,7 +35,9 @@
 #include "cusolverSp_LOWLEVEL_PREVIEW.h"
 #include <cusparse.h>
 #include <cuda_runtime.h>
-#include <cuda.h> 
+#include <cuda.h>
+
+#include <sofa/helper/OptionsGroup.h>
 
 namespace sofa::component::linearsolver::direct
 {
@@ -50,6 +52,8 @@ public:
     typedef TMatrix Matrix;
     typedef TVector Vector;
     typedef sofa::component::linearsolver::MatrixLinearSolver<TMatrix,TVector> Inherit;
+
+    Data<sofa::helper::OptionsGroup> d_typePermutation;
 
     int rowsA;///< numbuer of rows
     int colsA;///< number of columns
