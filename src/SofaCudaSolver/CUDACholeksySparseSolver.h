@@ -67,6 +67,13 @@ public:
     int* device_ColsInd;
     double* device_values;
 
+    int* host_perm;
+    int* device_perm;
+    int* host_map;
+
+    double* host_b_permuted;
+    double* host_x_permuted;
+
     cusolverSpHandle_t handle;
     cudaStream_t stream;
     cusparseHandle_t cusparseHandle;
@@ -76,11 +83,13 @@ public:
 
     size_t size_internal;
     size_t size_work;
+    size_t size_perm;
 
     double* device_x;
     double* device_b;
 
     void* buffer_gpu;
+    void* buffer_cpu;
    
     bool notSameShape;
 

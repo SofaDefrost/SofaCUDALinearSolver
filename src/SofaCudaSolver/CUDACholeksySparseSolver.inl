@@ -48,6 +48,9 @@ CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
         host_ColsInd = nullptr; 
         host_values = nullptr;
 
+        host_b_permuted = nullptr;
+        host_x_permuted = nullptr;
+
         device_RowPtr = nullptr;
         device_ColsInd = nullptr;
         device_values = nullptr;
@@ -55,14 +58,20 @@ CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
         device_x = nullptr;
         device_b = nullptr;
 
+        buffer_cpu = nullptr;
         buffer_gpu = nullptr;
         device_info = nullptr;
+
+        host_perm = nullptr;
+        device_perm = nullptr;
+        host_map = nullptr;
 
         singularity = 0;
         tol = 0.000001;
 
         size_internal = 0;
         size_work = 0;
+        size_perm = 0;
 
         notSameShape = true;
 
@@ -95,8 +104,16 @@ template<class TMatrix , class TVector>
 void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vector& b)
 {
     int n = M.colBSize()  ; // avoidable, used to prevent compilation warning
+
+    if(host_b_permuted) free(host_b_permuted);
+    host_b_permuted = (double*)malloc(sizeof(double)*n);
+    if(host_x_permuted) free(host_x_permuted);
+    host_x_permuted = (double*)malloc(sizeof(double)*n);
+
+    for(int i=0;i<n;i++) host_b_permuted[i] = b[ host_perm[i] ];
+    //WIP here solve with permuted values
     
-    checkCudaErrors(cudaMemcpyAsync(device_b, (double*)b.ptr(), sizeof(double)*n, cudaMemcpyHostToDevice, stream));
+    checkCudaErrors(cudaMemcpyAsync(device_b, host_b_permuted, sizeof(double)*n, cudaMemcpyHostToDevice, stream));
     checkCudaErrors(cudaMemcpyAsync(device_x, (double*)x.ptr(),sizeof(double)*n, cudaMemcpyHostToDevice, stream));
    
     cudaDeviceSynchronize();
@@ -108,10 +125,11 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
 
     checkCudaErrors(cudaDeviceSynchronize());
 
-    checkCudaErrors( cudaMemcpyAsync( (double*)x.ptr(), device_x, sizeof(double)*n, cudaMemcpyDeviceToHost,stream));
+    checkCudaErrors( cudaMemcpyAsync( host_x_permuted, device_x, sizeof(double)*n, cudaMemcpyDeviceToHost,stream));
 
     cudaDeviceSynchronize();
 
+    for(int i=0;i<n;i++) x[i] = host_x_permuted[ host_perm[i] ];
 }
 
 template<class TMatrix , class TVector>
@@ -155,6 +173,26 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
         if(device_values) cudaFree(device_values);
         checkCudaErrors(cudaMalloc( &device_values, sizeof(double)*nnz ));
     }
+
+    if(host_perm) free(host_perm);
+    host_perm =(int*) malloc(sizeof( int )*rowsA );
+    // compute fill reducing permutation
+    for(int i=0;i<rowsA;i++) host_perm[i] = i ; // identity
+    //checksolver( cusolverSpXcsrsymrcmHost(handle, rowsA, nnz, descr, host_RowPtr, host_ColsInd, host_perm) );
+
+    checksolver( cusolverSpXcsrperm_bufferSizeHost(handle, rowsA, colsA, nnz, descr, host_RowPtr, host_ColsInd
+                                                , host_perm, host_perm, &size_perm) );
+
+    if(buffer_cpu) free(buffer_cpu);
+    buffer_cpu = (void*)malloc(sizeof(char)*size_perm) ;
+
+    if(host_map) free(host_map);
+    host_map = (int*)malloc(sizeof(int)*nnz);
+
+    //apply the permutation
+    checksolver( cusolverSpXcsrpermHost( handle, rowsA, colsA, nnz, descr, host_RowPtr, host_ColsInd
+                                    , host_perm, host_perm, host_map, buffer_cpu ));
+
     // send data to the device
     checkCudaErrors( cudaMemcpyAsync( device_RowPtr, host_RowPtr, sizeof(int)*(rowsA+1), cudaMemcpyHostToDevice, stream) );
     checkCudaErrors( cudaMemcpyAsync( device_ColsInd, host_ColsInd, sizeof(int)*nnz, cudaMemcpyHostToDevice, stream ) );
@@ -194,9 +232,6 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
     for(int i=0;i<nnz;i++) previous_ColsInd[i] = host_ColsInd[i];
     for(int i=0; i<rowsA +1; i++) previous_RowPtr[i] = host_RowPtr[i];
 
-
-    // compute fill reducing permutation
-    
     // to-do : add the choice for the permutations
 
     //to do : apply permutation 
