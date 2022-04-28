@@ -66,6 +66,7 @@ public:
     int* host_RowPtr; 
     int* host_ColsInd; 
     double* host_values;
+    double* host_values_permuted;
 
     int* device_RowPtr;
     int* device_ColsInd;
