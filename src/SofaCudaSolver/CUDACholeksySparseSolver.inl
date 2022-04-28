@@ -132,6 +132,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
     cudaDeviceSynchronize();
 
     {
+        // LUy = Pb
         sofa::helper::ScopedAdvancedTimer solveTimer("Solve");
         checksolver( cusolverSpDcsrcholSolve( handle, n, device_b, device_x, device_info, buffer_gpu ) );
     }
@@ -148,7 +149,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
         checkCudaErrors( cudaMemcpyAsync( host_x_permuted, device_x, sizeof(double)*n, cudaMemcpyDeviceToHost,stream));
         cudaDeviceSynchronize();
 
-        for(int i=0;i<n;i++) x[host_perm[i]] = host_x_permuted[ i ];
+        for(int i=0;i<n;i++) x[ host_perm[i] ] = host_x_permuted[ i ]; // Px = y
     }
 }
 
@@ -188,6 +189,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
         host_values_permuted = (double*)malloc(sizeof(double)*nnz);
     }
 
+    // A = PAQ
     // compute fill reducing permutation
     if( d_typePermutation.getValue().getSelectedId() )
     {
@@ -249,7 +251,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
 
     cudaDeviceSynchronize();
     
-    // factorize on device
+    // factorize on device LU = PAQ
     if(notSameShape)
     {
         if(device_info) cusolverSpDestroyCsrcholInfo(device_info);
@@ -281,11 +283,6 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
     previous_ColsInd.resize( nnz );
     for(int i=0;i<nnz;i++) previous_ColsInd[i] = host_ColsInd[i];
     for(int i=0; i<rowsA +1; i++) previous_RowPtr[i] = host_RowPtr[i];
-
-    // to-do : add the choice for the permutations
-
-    //to do : apply permutation 
-
 }
 
 bool compareMatrixShape(const int s_M,const int * M_colind,const int * M_rowptr,const int s_P,const int * P_colind,const int * P_rowptr) {
