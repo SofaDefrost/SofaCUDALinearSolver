@@ -15,10 +15,13 @@ set(HEADER_FILES
     ${SOFACUDASOLVER_SRC_DIR}/config.h.in
     ${SOFACUDASOLVER_SRC_DIR}/CUDACholeksySparseSolver.h
     ${SOFACUDASOLVER_SRC_DIR}/CUDACholeksySparseSolver.inl
+    ${SOFACUDASOLVER_SRC_DIR}/SolverGPU.h
+    ${SOFACUDASOLVER_SRC_DIR}/SolverGPU.inl
     )
 set(SOURCE_FILES
     ${SOFACUDASOLVER_SRC_DIR}/initSofaCudaSolver.cpp
     ${SOFACUDASOLVER_SRC_DIR}/CUDACholeksySparseSolver.cpp
+    ${SOFACUDASOLVER_SRC_DIR}/SolverGPU.cpp
     )
 set(README_FILES
     README.md
