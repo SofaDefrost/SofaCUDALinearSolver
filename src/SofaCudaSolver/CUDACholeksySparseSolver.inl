@@ -148,7 +148,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
         checkCudaErrors( cudaMemcpyAsync( host_x_permuted, device_x, sizeof(double)*n, cudaMemcpyDeviceToHost,stream));
         cudaDeviceSynchronize();
 
-        for(int i=0;i<n;i++) x[i] = host_x_permuted[ host_perm[i] ];
+        for(int i=0;i<n;i++) x[host_perm[i]] = host_x_permuted[ i ];
     }
 }
 
