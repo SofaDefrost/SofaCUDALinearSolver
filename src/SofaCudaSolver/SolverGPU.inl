@@ -58,12 +58,18 @@ SolverGPU<TMatrix,TVector>::SolverGPU()
         host_RowPtr = nullptr; 
         host_ColsInd = nullptr; 
         host_values = nullptr;
+
         device_RowPtr = nullptr;
         device_ColsInd = nullptr;
         device_values = nullptr;
+
         device_x = nullptr;
         device_b = nullptr;
+
         buffer_cpu = nullptr;
+
+        previous_nnz =0 ;
+        previous_n =0 ;
 
         singularity = 0;
         tol = 0.000001;
@@ -83,7 +89,7 @@ void SolverGPU<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vector& b)
 {
     int n = M.colBSize(); // avoidable, used to prevent compilation warning
 
-    if(firstStep)
+    if(previous_n != n)
     {
         checkCudaErrors(cudaMalloc(&device_x, sizeof(double)*n));
         checkCudaErrors(cudaMalloc(&device_b, sizeof(double)*colsA));
@@ -102,12 +108,12 @@ void SolverGPU<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vector& b)
     {
         case 0:
         default:
-        if(reorder) reorder = 1; // only RCM available for LU, see Nvidia documentation
-        // LU on CPU only? path to GPU version not provided
-            checksolver(cusolverSpDcsrlsvluHost(
-                    handle, rowsA, nnz, descr, host_values, host_RowPtr,
-                    host_ColsInd, b.ptr() , tol, reorder, x.ptr(),
-                    &singularity));
+            if(reorder) reorder = 1; // only RCM available for LU, see Nvidia documentation
+            // LU on CPU only? path to GPU version not provided
+                checksolver(cusolverSpDcsrlsvluHost(
+                        handle, rowsA, nnz, descr, host_values, host_RowPtr,
+                        host_ColsInd, b.ptr() , tol, reorder, x.ptr(),
+                        &singularity));
             break;
 
         case 1://Cholesky
@@ -117,8 +123,7 @@ void SolverGPU<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vector& b)
                 &singularity));
             checkCudaErrors(cudaDeviceSynchronize());
 
-            checkCudaErrors( cudaMemcpy( (double*)x.ptr(), device_x,
-             sizeof(double)*colsA, cudaMemcpyDeviceToHost));
+            checkCudaErrors( cudaMemcpy( (double*)x.ptr(), device_x,sizeof(double)*colsA, cudaMemcpyDeviceToHost));
 
             break;
 
@@ -136,7 +141,7 @@ void SolverGPU<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vector& b)
         
     }
     
-    
+    previous_n = n;
 }
 
 template<class TMatrix , class TVector>
@@ -145,7 +150,7 @@ void SolverGPU<TMatrix,TVector>:: invert(Matrix& M)
    M.compress();
    rowsA = M.rowBSize();
    colsA = M.colBSize();
-   previous_nnz = nnz;
+   
    nnz = M.getColsValue().size(); // number of non zero coefficients
    // copy the matrix
    host_RowPtr = (int*) M.getRowBegin().data();
@@ -159,7 +164,11 @@ void SolverGPU<TMatrix,TVector>:: invert(Matrix& M)
    for(int i=0; i<nnz ; i++) host_values[i] = (double) M.getColsValue()[i];
 
     //  allow memory on device
-    if(firstStep) checkCudaErrors(cudaMalloc( &device_RowPtr, sizeof(int)*( rowsA +1) ));
+    if(previous_n != rowsA) 
+    {
+        if(device_RowPtr) cudaFree(device_RowPtr);
+        checkCudaErrors(cudaMalloc( &device_RowPtr, sizeof(int)*( rowsA +1) ));
+    }
     if(previous_nnz != nnz) 
     {   
         if(device_ColsInd) checkCudaErrors(cudaFree(device_ColsInd));
@@ -175,6 +184,7 @@ void SolverGPU<TMatrix,TVector>:: invert(Matrix& M)
 
     cudaDeviceSynchronize();
   
+    previous_nnz = nnz;
 }
 
 }// namespace sofa::component::linearsolver::direct

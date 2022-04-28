@@ -61,6 +61,7 @@ public:
   int nnz;///< number of non zero elements
 
   int previous_nnz;
+  int previous_n;
 
   bool firstStep;
 
