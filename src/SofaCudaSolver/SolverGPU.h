@@ -56,8 +56,8 @@ public:
   typedef TVector Vector;
   typedef sofa::component::linearsolver::MatrixLinearSolver<TMatrix,TVector> Inherit;
 
-  int rowsA;///< numbuer of rows
-  int colsA;///< number of columns
+  int rows;///< numbuer of rows
+  int cols;///< number of columns
   int nnz;///< number of non zero elements
 
   int previous_nnz;

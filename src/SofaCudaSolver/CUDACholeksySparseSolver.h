@@ -31,8 +31,8 @@
 #include <sofa/helper/map.h>
 #include <cmath>
 
-#include "cusolverSp.h"
-#include "cusolverSp_LOWLEVEL_PREVIEW.h"
+#include <cusolverSp.h>
+#include <cusolverSp_LOWLEVEL_PREVIEW.h>
 #include <cusparse.h>
 #include <cuda_runtime.h>
 #include <cuda.h>
@@ -55,8 +55,8 @@ public:
 
     Data<sofa::helper::OptionsGroup> d_typePermutation;
 
-    int rowsA;///< numbuer of rows
-    int colsA;///< number of columns
+    int rows;///< numbuer of rows
+    int cols;///< number of columns
     int nnz;///< number of non zero elements
 
     int singularity;
@@ -64,8 +64,11 @@ public:
 
     // csr format
     int* host_RowPtr; 
-    int* host_ColsInd; 
+    int* host_ColsInd;
     double* host_values;
+
+    int* host_RowPtr_permuted;
+    int* host_ColsInd_permuted;
     double* host_values_permuted;
 
     int* device_RowPtr;
@@ -73,7 +76,7 @@ public:
     double* device_values;
 
     int* host_perm;
-    int* device_perm;
+    int* host_invperm;
     int* host_map;
 
     double* host_b_permuted;
@@ -100,6 +103,8 @@ public:
 
     int previous_n;
     int previous_nnz;
+
+    int reorder;
 
     sofa::type::vector<int> previous_ColsInd;
     sofa::type::vector<int> previous_RowPtr;

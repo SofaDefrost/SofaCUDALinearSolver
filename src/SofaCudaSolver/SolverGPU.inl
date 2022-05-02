@@ -92,11 +92,11 @@ void SolverGPU<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vector& b)
     if(previous_n != n)
     {
         checkCudaErrors(cudaMalloc(&device_x, sizeof(double)*n));
-        checkCudaErrors(cudaMalloc(&device_b, sizeof(double)*colsA));
+        checkCudaErrors(cudaMalloc(&device_b, sizeof(double)*n));
     }
 
-    checkCudaErrors(cudaMemcpyAsync(device_b, (double*)b.ptr(), sizeof(double)*colsA, cudaMemcpyHostToDevice, stream));
-    checkCudaErrors(cudaMemcpyAsync(device_x, (double*)x.ptr(),sizeof(double)*colsA, cudaMemcpyHostToDevice, stream));
+    checkCudaErrors(cudaMemcpyAsync(device_b, (double*)b.ptr(), sizeof(double)*n, cudaMemcpyHostToDevice, stream));
+    checkCudaErrors(cudaMemcpyAsync(device_x, (double*)x.ptr(),sizeof(double)*n, cudaMemcpyHostToDevice, stream));
    
     cudaDeviceSynchronize();
 
@@ -111,31 +111,31 @@ void SolverGPU<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vector& b)
             if(reorder) reorder = 1; // only RCM available for LU, see Nvidia documentation
             // LU on CPU only? path to GPU version not provided
                 checksolver(cusolverSpDcsrlsvluHost(
-                        handle, rowsA, nnz, descr, host_values, host_RowPtr,
+                        handle, rows, nnz, descr, host_values, host_RowPtr,
                         host_ColsInd, b.ptr() , tol, reorder, x.ptr(),
                         &singularity));
             break;
 
         case 1://Cholesky
             checksolver(cusolverSpDcsrlsvchol(
-                handle, rowsA, nnz, descr, device_values, device_RowPtr,
+                handle, rows, nnz, descr, device_values, device_RowPtr,
                 device_ColsInd, device_b , tol, reorder, device_x,
                 &singularity));
             checkCudaErrors(cudaDeviceSynchronize());
 
-            checkCudaErrors( cudaMemcpy( (double*)x.ptr(), device_x,sizeof(double)*colsA, cudaMemcpyDeviceToHost));
+            checkCudaErrors( cudaMemcpy( (double*)x.ptr(), device_x,sizeof(double)*n, cudaMemcpyDeviceToHost));
 
             break;
 
         case 2://QR
             checksolver(cusolverSpDcsrlsvqr(
-                handle, rowsA, nnz, descr, device_values, device_RowPtr,
+                handle, rows, nnz, descr, device_values, device_RowPtr,
                 device_ColsInd, device_b , tol, reorder, device_x,
                 &singularity));
             checkCudaErrors(cudaDeviceSynchronize());
 
             checkCudaErrors( cudaMemcpy( (double*)x.ptr(), device_x,
-             sizeof(double)*colsA, cudaMemcpyDeviceToHost));
+             sizeof(double)*n, cudaMemcpyDeviceToHost));
 
             break;
         
@@ -148,8 +148,8 @@ template<class TMatrix , class TVector>
 void SolverGPU<TMatrix,TVector>:: invert(Matrix& M)
 {
    M.compress();
-   rowsA = M.rowBSize();
-   colsA = M.colBSize();
+   rows = M.rowBSize();
+   cols = M.colBSize();
    
    nnz = M.getColsValue().size(); // number of non zero coefficients
    // copy the matrix
@@ -164,10 +164,10 @@ void SolverGPU<TMatrix,TVector>:: invert(Matrix& M)
    for(int i=0; i<nnz ; i++) host_values[i] = (double) M.getColsValue()[i];
 
     //  allow memory on device
-    if(previous_n != rowsA) 
+    if(previous_n != rows) 
     {
         if(device_RowPtr) cudaFree(device_RowPtr);
-        checkCudaErrors(cudaMalloc( &device_RowPtr, sizeof(int)*( rowsA +1) ));
+        checkCudaErrors(cudaMalloc( &device_RowPtr, sizeof(int)*( rows +1) ));
     }
     if(previous_nnz != nnz) 
     {   
@@ -178,7 +178,7 @@ void SolverGPU<TMatrix,TVector>:: invert(Matrix& M)
     }
 
     // send data to the device
-    checkCudaErrors( cudaMemcpyAsync( device_RowPtr, host_RowPtr, sizeof(int)*(rowsA+1), cudaMemcpyHostToDevice, stream) );
+    checkCudaErrors( cudaMemcpyAsync( device_RowPtr, host_RowPtr, sizeof(int)*(rows+1), cudaMemcpyHostToDevice, stream) );
     checkCudaErrors( cudaMemcpyAsync( device_ColsInd, host_ColsInd, sizeof(int)*nnz, cudaMemcpyHostToDevice, stream ) );
     checkCudaErrors( cudaMemcpyAsync( device_values, host_values, sizeof(double)*nnz, cudaMemcpyHostToDevice, stream ) );
 
