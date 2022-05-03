@@ -26,10 +26,7 @@
 #include <sofa/core/behavior/LinearSolver.h>
 #include <sofa/component/linearsolver/iterative/MatrixLinearSolver.h>
 #include <sofa/simulation/MechanicalVisitor.h>
-#include <sofa/linearalgebra/SparseMatrix.h>
-#include <sofa/linearalgebra/CompressedRowSparseMatrix.h>
-#include <sofa/helper/map.h>
-#include <cmath>
+
 
 #include <cusolverSp.h>
 #include <cusolverSp_LOWLEVEL_PREVIEW.h>
@@ -54,13 +51,13 @@ public:
     typedef sofa::component::linearsolver::MatrixLinearSolver<TMatrix,TVector> Inherit;
 
     Data<sofa::helper::OptionsGroup> d_typePermutation;
+    Data<double> f_tol; ///< tolerance of factorization
 
     int rows;///< numbuer of rows
     int cols;///< number of columns
     int nnz;///< number of non zero elements
 
     int singularity;
-    double tol;
 
     // csr format
     int* host_RowPtr; 
@@ -76,7 +73,6 @@ public:
     double* device_values;
 
     int* host_perm;
-    int* host_invperm;
     int* host_map;
 
     double* host_b_permuted;

@@ -26,10 +26,6 @@
 #include <sofa/core/behavior/LinearSolver.h>
 #include <sofa/component/linearsolver/iterative/MatrixLinearSolver.h>
 #include <sofa/simulation/MechanicalVisitor.h>
-#include <sofa/linearalgebra/SparseMatrix.h>
-#include <sofa/linearalgebra/CompressedRowSparseMatrix.h>
-#include <sofa/helper/map.h>
-#include <cmath>
 
 #include <sofa/helper/OptionsGroup.h>
 
