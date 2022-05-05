@@ -291,6 +291,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
     {
         // LL^t y = Pb
         sofa::helper::ScopedAdvancedTimer solveTimer("Solve");
+        checkCudaErrors(cudaDeviceSynchronize());
         checksolver( cusolverSpDcsrcholSolve( handle, n, device_b, device_x, device_info, buffer_gpu ) );
         checkCudaErrors(cudaDeviceSynchronize());
     }
