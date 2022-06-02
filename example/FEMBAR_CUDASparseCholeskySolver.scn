@@ -2,7 +2,7 @@
 
     <include href="FEMBAR-common.xml"/>
 
-    <CUDASparseCholeskySolver />
+    <CUDASparseCholeskySolver template="CompressedRowSparseMatrixMat3x3d" permutation="METIS"/>
     <HexahedronFEMForceField name="FEM" youngModulus="4000" poissonRatio="0.3" method="large" />
 
 </Node>

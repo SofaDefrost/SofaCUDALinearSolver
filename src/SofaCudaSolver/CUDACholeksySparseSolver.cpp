@@ -19,7 +19,7 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#define SOFA_PLUGIN_SPARSECHOLESKYSOLVER_CPP
+#define SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP
 #include <SofaCudaSolver/CUDACholeksySparseSolver.inl>
 #include <sofa/core/ObjectFactory.h>
 
@@ -29,9 +29,11 @@ namespace sofa::component::linearsolver::direct
 using namespace sofa::linearalgebra;
 
 int CUDASparseCholeskySolverClass = core::RegisterObject("Direct linear solver based on Sparse Cholesky factorization, implemented with the cuSOLVER library")
-        .add< CUDASparseCholeskySolver< CompressedRowSparseMatrix<SReal>,FullVector<SReal> > >()
-        ;
+    .add< CUDASparseCholeskySolver< CompressedRowSparseMatrix<SReal>,FullVector<SReal> > >()
+    .add< CUDASparseCholeskySolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, SReal> >,FullVector<SReal> > >()
+;
 
 template class SOFACUDASOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<SReal>,FullVector<SReal> > ;
+template class SOFACUDASOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, SReal> >,FullVector<SReal> > ;
 
 } // namespace sofa::component::linearsolver::direct

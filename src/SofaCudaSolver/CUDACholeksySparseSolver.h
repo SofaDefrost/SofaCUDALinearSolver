@@ -48,6 +48,7 @@ public:
 
     typedef TMatrix Matrix;
     typedef TVector Vector;
+    typedef typename Matrix::Real Real;
     typedef sofa::component::linearsolver::MatrixLinearSolver<TMatrix,TVector> Inherit;
 
     Data<sofa::helper::OptionsGroup> d_typePermutation;
@@ -106,9 +107,13 @@ public:
     sofa::type::vector<int> previous_RowPtr;
 
     CUDASparseCholeskySolver();
-    ~CUDASparseCholeskySolver();
+    ~CUDASparseCholeskySolver() override;
     void solve (Matrix& M, Vector& x, Vector& b) override;
     void invert(Matrix& M) override;
+
+private:
+
+    sofa::linearalgebra::CompressedRowSparseMatrix<Real> m_filteredMatrix;
     
 };
 // compare the shape of 2 matrix given in csr format, return true if the don't have the same shape
@@ -129,13 +134,44 @@ inline void __checkCudaErrors(cudaError err, const char *file, const int line) {
 inline void __checksolver( cusolverStatus_t status, const char *file, const int line){
     if(status != 0)
     {
-        std::cout<<'\n'<< "Cuda Failure in" << file << " at line "<< line <<'\n'<< std::endl;
+        std::cout <<'\n' << "Cuda Failure in " << file << " at line "<< line << std::endl;
+
+        static const std::map<cusolverStatus_t, std::string> statusMap {
+            { CUSOLVER_STATUS_SUCCESS, "success" },
+            { CUSOLVER_STATUS_NOT_INITIALIZED, "not initialized" },
+            { CUSOLVER_STATUS_ALLOC_FAILED, "alloc failed" },
+            { CUSOLVER_STATUS_INVALID_VALUE, "invalid value" },
+            { CUSOLVER_STATUS_ARCH_MISMATCH, "arch mismatch" },
+            { CUSOLVER_STATUS_MAPPING_ERROR, "mapping error" },
+            { CUSOLVER_STATUS_EXECUTION_FAILED, "execution failed" },
+            { CUSOLVER_STATUS_INTERNAL_ERROR, "internal error" },
+            { CUSOLVER_STATUS_MATRIX_TYPE_NOT_SUPPORTED, "matrix type not supported" },
+            { CUSOLVER_STATUS_NOT_SUPPORTED, "not supported" },
+            { CUSOLVER_STATUS_ZERO_PIVOT, "zero pivot" },
+            { CUSOLVER_STATUS_INVALID_LICENSE, "invalid license" },
+            { CUSOLVER_STATUS_IRS_PARAMS_NOT_INITIALIZED, "IRS params not initialized" },
+            { CUSOLVER_STATUS_IRS_PARAMS_INVALID, "IRS params invalid" },
+            { CUSOLVER_STATUS_IRS_PARAMS_INVALID_PREC, "IRS params invalid prec" },
+            { CUSOLVER_STATUS_IRS_PARAMS_INVALID_REFINE, "IRS params invalid refine" },
+            { CUSOLVER_STATUS_IRS_PARAMS_INVALID_MAXITER, "IRS params invalid maxiter" },
+            { CUSOLVER_STATUS_IRS_INTERNAL_ERROR, "IRS internal error" },
+            { CUSOLVER_STATUS_IRS_NOT_SUPPORTED, "IRS not supported" },
+            { CUSOLVER_STATUS_IRS_OUT_OF_RANGE, "IRS out of range" },
+            { CUSOLVER_STATUS_IRS_NRHS_NOT_SUPPORTED_FOR_REFINE_GMRES, "IRS NRHS not supported for refine GMRES" },
+            { CUSOLVER_STATUS_IRS_INFOS_NOT_INITIALIZED, "IRS infos not initialized" },
+            { CUSOLVER_STATUS_IRS_INFOS_NOT_DESTROYED, "IRS infos not destroyed" },
+            { CUSOLVER_STATUS_IRS_MATRIX_SINGULAR, "IRS matrix singular" },
+            { CUSOLVER_STATUS_INVALID_WORKSPACE, "invalid workspace" },
+        };
+
+        std::cout << "Status: " << status << " - " << statusMap.at(status) << "\n" << std::endl;
         exit(EXIT_FAILURE);
     }
 }
 
 #if  !defined(SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP)
 extern template class SOFACUDASOLVER_API CUDASparseCholeskySolver< sofa::linearalgebra::CompressedRowSparseMatrix<SReal>, sofa::linearalgebra::FullVector<SReal> > ;
+extern template class SOFACUDASOLVER_API CUDASparseCholeskySolver< sofa::linearalgebra::CompressedRowSparseMatrix<sofa::type::Mat<3,3,SReal> >, sofa::linearalgebra::FullVector<SReal> > ;
 #endif
 
 } // namespace sofa::component::linearsolver::direct

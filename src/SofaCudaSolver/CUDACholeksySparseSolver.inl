@@ -118,18 +118,21 @@ CUDASparseCholeskySolver<TMatrix,TVector>::~CUDASparseCholeskySolver()
 template<class TMatrix , class TVector>
 void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
 {
-    
-    M.compress();
+    {
+        sofa::helper::ScopedAdvancedTimer copyTimer("copyMatrixData");
+        m_filteredMatrix.copyNonZeros(M);
+        m_filteredMatrix.compress();
+    }
 
     reorder = d_typePermutation.getValue().getSelectedId() ;
-    rows = M.rowBSize();
-    cols = M.colBSize();   
-    nnz = M.getColsValue().size(); // number of non zero coefficients
+    rows = m_filteredMatrix.rowSize();
+    cols = m_filteredMatrix.colSize();
+    nnz = m_filteredMatrix.getColsValue().size(); // number of non zero coefficients
 
     // copy the matrix
-    host_RowPtr = (int*) M.getRowBegin().data();
-    host_ColsInd = (int*) M.getColsIndex().data();
-    host_values = (double*) M.getColsValue().data();
+    host_RowPtr = (int*) m_filteredMatrix.getRowBegin().data();
+    host_ColsInd = (int*) m_filteredMatrix.getColsIndex().data();
+    host_values = (double*) m_filteredMatrix.getColsValue().data();
  
     notSameShape = compareMatrixShape(rows , host_ColsInd, host_RowPtr, previous_RowPtr.size()-1,  previous_ColsInd.data(), previous_RowPtr.data() );
 
@@ -268,7 +271,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
 template<class TMatrix , class TVector>
 void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vector& b)
 {
-    int n = M.colBSize()  ; // avoidable, used to prevent compilation warning
+    int n = M.colSize()  ; // avoidable, used to prevent compilation warning
 
     if( (previous_n!=n) && (reorder !=0) )
     {
@@ -284,7 +287,10 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
     }
     else
     {
-        for(int i=0;i<n;i++) host_b_permuted[i] = b[ host_perm[i] ];
+        for(int i = 0; i < n; ++i)
+        {
+            host_b_permuted[i] = b[ host_perm[i] ];
+        }
         checkCudaErrors( cudaMemcpyAsync( device_b, host_b_permuted, sizeof(double)*n, cudaMemcpyHostToDevice,stream));
     }
 
@@ -306,7 +312,10 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
         checkCudaErrors( cudaMemcpyAsync( host_x_permuted, device_x, sizeof(double)*n, cudaMemcpyDeviceToHost,stream));
         cudaDeviceSynchronize();
 
-        for(int i=0;i<n;i++) x[host_perm[i]] = host_x_permuted[ i ]; // Px = y
+        for(int i = 0; i < n; ++i)
+        {
+            x[host_perm[i]] = host_x_permuted[ i ]; // Px = y
+        }
     }
     previous_n = n ;
 }
