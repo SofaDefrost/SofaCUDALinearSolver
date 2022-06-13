@@ -12,8 +12,10 @@
 
     <VisualStyle displayFlags="showBehaviorModels showForceFields" />
 
-    <DefaultAnimationLoop name="animationLoop"/>
     <DefaultVisualManagerLoop name="visualLoop"/>
+
+    <FreeMotionAnimationLoop parallelODESolving="true"/>
+    <GenericConstraintSolver/>
 
     <Node name="bar1">
 
@@ -23,7 +25,7 @@
         <RegularGridTopology name="grid" nx="4" ny="4" nz="20" xmin="-9" xmax="-6" ymin="0" ymax="3" zmin="0" zmax="19" />
         <BoxROI name="box" box="-10 -1 -0.0001  -5 4 0.0001"/>
         <FixedConstraint indices="@box.indices" />
-
+        <UncoupledConstraintCorrection />
         <CUDASparseCholeskySolver template="CompressedRowSparseMatrixMat3x3d" permutation="METIS"/>
         <HexahedronFEMForceField name="FEM" youngModulus="4000" poissonRatio="0.3" method="large" />
 
@@ -37,7 +39,7 @@
         <RegularGridTopology name="grid" nx="4" ny="4" nz="20" xmin="-9" xmax="-6" ymin="0" ymax="3" zmin="0" zmax="19" />
         <BoxROI name="box" box="-10 -1 -0.0001  -5 4 0.0001"/>
         <FixedConstraint indices="@box.indices" />
-
+        <UncoupledConstraintCorrection />
         <CUDASparseCholeskySolver template="CompressedRowSparseMatrixMat3x3d" permutation="METIS"/>
         <HexahedronFEMForceField name="FEM" youngModulus="8000" poissonRatio="0.3" method="large" />
 
