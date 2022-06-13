@@ -110,8 +110,8 @@ private:
     sofa::linearalgebra::CompressedRowSparseMatrix<Real> m_filteredMatrix;
     
 };
-// compare the shape of 2 matrices given in csr format, return true if the don't have the same shape
-bool compareMatrixShape(const int,const int *,const int *,const int,const int *,const int *) ;
+// compare the shape of 2 matrices given in csr format, return true if the matrices don't have the same shape
+bool compareMatrixShape(int, const int *,const int *, int,const int *,const int *) ;
 
 #if  !defined(SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP)
 extern template class SOFACUDASOLVER_API CUDASparseCholeskySolver< sofa::linearalgebra::CompressedRowSparseMatrix<SReal>, sofa::linearalgebra::FullVector<SReal> > ;

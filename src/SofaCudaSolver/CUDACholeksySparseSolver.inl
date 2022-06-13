@@ -34,65 +34,65 @@ template<class TMatrix , class TVector>
 CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
     : Inherit1()
     , d_typePermutation(initData(&d_typePermutation, "permutation", "Type of fill-in reducing permutation"))
-    {
-        sofa::helper::OptionsGroup d_typePermutationOptions(4,"None","RCM" ,"AMD", "METIS");
-        d_typePermutationOptions.setSelectedItem(0); // default None
-        d_typePermutation.setValue(d_typePermutationOptions);
+{
+    sofa::helper::OptionsGroup d_typePermutationOptions(4,"None","RCM" ,"AMD", "METIS");
+    d_typePermutationOptions.setSelectedItem(0); // default None
+    d_typePermutation.setValue(d_typePermutationOptions);
 
-        cusolverSpCreate(&handle);
-        cusparseCreate(&cusparseHandle);
+    cusolverSpCreate(&handle);
+    cusparseCreate(&cusparseHandle);
 
-        cudaStreamCreate(&stream);
+    cudaStreamCreate(&stream);
 
-        cusolverSpSetStream(handle, stream);
-        cusparseSetStream(cusparseHandle, stream);
+    cusolverSpSetStream(handle, stream);
+    cusparseSetStream(cusparseHandle, stream);
 
-        cusparseCreateMatDescr(&descr);
-        cusparseSetMatType(descr, CUSPARSE_MATRIX_TYPE_GENERAL);
-        cusparseSetMatIndexBase(descr, CUSPARSE_INDEX_BASE_ZERO);
+    cusparseCreateMatDescr(&descr);
+    cusparseSetMatType(descr, CUSPARSE_MATRIX_TYPE_GENERAL);
+    cusparseSetMatIndexBase(descr, CUSPARSE_INDEX_BASE_ZERO);
 
-        host_RowPtr = nullptr; 
-        host_ColsInd = nullptr; 
-        host_values = nullptr;
+    host_RowPtr = nullptr;
+    host_ColsInd = nullptr;
+    host_values = nullptr;
 
-        host_RowPtr_permuted = nullptr;
-        host_ColsInd_permuted = nullptr;
-        host_values_permuted = nullptr;
+    host_RowPtr_permuted = nullptr;
+    host_ColsInd_permuted = nullptr;
+    host_values_permuted = nullptr;
 
-        host_b_permuted = nullptr;
-        host_x_permuted = nullptr;
+    host_b_permuted = nullptr;
+    host_x_permuted = nullptr;
 
-        device_RowPtr = nullptr;
-        device_ColsInd = nullptr;
-        device_values = nullptr;
+    device_RowPtr = nullptr;
+    device_ColsInd = nullptr;
+    device_values = nullptr;
 
-        device_x = nullptr;
-        device_b = nullptr;
+    device_x = nullptr;
+    device_b = nullptr;
 
-        buffer_cpu = nullptr;
-        buffer_gpu = nullptr;
-        device_info = nullptr;
+    buffer_cpu = nullptr;
+    buffer_gpu = nullptr;
+    device_info = nullptr;
 
-        host_perm = nullptr;
-        host_map = nullptr;
+    host_perm = nullptr;
+    host_map = nullptr;
 
-        singularity = 0;
+    singularity = 0;
 
-        size_internal = 0;
-        size_work = 0;
-        size_perm = 0;
+    size_internal = 0;
+    size_work = 0;
+    size_perm = 0;
 
-        notSameShape = true;
+    notSameShape = true;
 
-        nnz = 0;
-        previous_n = 0 ;
-        previous_nnz = 0;
-        rows = 0;
-        reorder = 0;
-        previous_ColsInd.clear() ;
-        previous_RowPtr.clear() ;
+    nnz = 0;
+    previous_n = 0 ;
+    previous_nnz = 0;
+    rows = 0;
+    reorder = 0;
+    previous_ColsInd.clear() ;
+    previous_RowPtr.clear() ;
 
-    }
+}
 
 template<class TMatrix , class TVector>
 CUDASparseCholeskySolver<TMatrix,TVector>::~CUDASparseCholeskySolver()
@@ -321,7 +321,8 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
     previous_n = n ;
 }
 
-bool compareMatrixShape(const int s_M,const int * M_colind,const int * M_rowptr,const int s_P,const int * P_colind,const int * P_rowptr) {
+inline bool compareMatrixShape(const int s_M,const int * M_colind,const int * M_rowptr,const int s_P,const int * P_colind,const int * P_rowptr)
+{
     if (s_M != s_P) return true;
     if (M_rowptr[s_M] != P_rowptr[s_M] ) return true; 
     for (int i=0;i<s_P;i++) {
