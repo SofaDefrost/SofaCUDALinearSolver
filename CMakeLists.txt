@@ -17,6 +17,7 @@ set(HEADER_FILES
     ${SOFACUDASOLVER_SRC_DIR}/CUDACholeksySparseSolver.inl
     ${SOFACUDASOLVER_SRC_DIR}/SolverGPU.h
     ${SOFACUDASOLVER_SRC_DIR}/SolverGPU.inl
+    ${SOFACUDASOLVER_SRC_DIR}/utils.h
     )
 set(SOURCE_FILES
     ${SOFACUDASOLVER_SRC_DIR}/initSofaCudaSolver.cpp

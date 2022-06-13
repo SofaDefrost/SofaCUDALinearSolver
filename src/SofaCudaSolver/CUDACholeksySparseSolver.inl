@@ -23,6 +23,8 @@
 
 #include <SofaCudaSolver/CUDACholeksySparseSolver.h>
 #include <sofa/helper/ScopedAdvancedTimer.h>
+#include <SofaCudaSolver/utils.h>
+#include <cusparse.h>
 
 
 namespace sofa::component::linearsolver::direct
