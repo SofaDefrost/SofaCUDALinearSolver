@@ -23,6 +23,7 @@
 
 #include "SolverGPU.h"
 #include <sofa/helper/ScopedAdvancedTimer.h>
+#include <SofaCudaSolver/utils.h>
 
 
 namespace sofa::component::linearsolver::direct

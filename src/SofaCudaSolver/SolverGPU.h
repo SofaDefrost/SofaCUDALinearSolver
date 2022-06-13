@@ -93,24 +93,6 @@ public:
     
 };
 
-#define checkCudaErrors(err) __checkCudaErrors(err, __FILE__, __LINE__)
-
-inline void __checkCudaErrors(cudaError err, const char *file, const int line) {
-  if (cudaSuccess != err) {
-    std::cout<< "CUDA error in file "<< file<< " at line"<< line<< std::endl;
-    exit(EXIT_FAILURE);
-  }
-}
-
-#define checksolver(status) __checksolver(status, __FILE__, __LINE__)
-inline void __checksolver( cusolverStatus_t status, const char *file, const int line){
-    if(status != 0)
-    {
-        std::cout<< "Cuda Failure in file " << file <<" at line "<< line << std::endl;
-        exit(EXIT_FAILURE);
-    }
-}
-
 #if  !defined(SOFA_PLUGIN_SOLVERGPU_CPP)
 extern template class SOFACUDASOLVER_API SolverGPU< sofa::linearalgebra::CompressedRowSparseMatrix<SReal>, sofa::linearalgebra::FullVector<SReal> > ;
 #endif
