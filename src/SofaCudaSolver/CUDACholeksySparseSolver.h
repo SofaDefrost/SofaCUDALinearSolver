@@ -63,21 +63,21 @@ public:
     // csr format
     int* host_RowPtr; 
     int* host_ColsInd;
-    double* host_values;
+    SReal* host_values;
 
     int* host_RowPtr_permuted;
     int* host_ColsInd_permuted;
-    double* host_values_permuted;
+    SReal* host_values_permuted;
 
     int* device_RowPtr;
     int* device_ColsInd;
-    double* device_values;
+    SReal* device_values;
 
     int* host_perm;
     int* host_map;
 
-    double* host_b_permuted;
-    double* host_x_permuted;
+    SReal* host_b_permuted;
+    SReal* host_x_permuted;
 
     cusolverSpHandle_t handle;
     cudaStream_t stream;
@@ -90,8 +90,8 @@ public:
     size_t size_work;
     size_t size_perm;
 
-    double* device_x;
-    double* device_b;
+    SReal* device_x;
+    SReal* device_b;
 
     void* buffer_gpu;
     void* buffer_cpu;
