@@ -51,6 +51,11 @@ public:
     typedef typename Matrix::Real Real;
     typedef sofa::component::linearsolver::MatrixLinearSolver<TMatrix,TVector> Inherit;
 
+    void solve (Matrix& M, Vector& x, Vector& b) override;
+    void invert(Matrix& M) override;
+
+private:
+
     Data<sofa::helper::OptionsGroup> d_typePermutation;
     Data<double> f_tol; ///< tolerance of factorization
 
@@ -108,15 +113,11 @@ public:
 
     CUDASparseCholeskySolver();
     ~CUDASparseCholeskySolver() override;
-    void solve (Matrix& M, Vector& x, Vector& b) override;
-    void invert(Matrix& M) override;
-
-private:
 
     sofa::linearalgebra::CompressedRowSparseMatrix<Real> m_filteredMatrix;
     
 };
-// compare the shape of 2 matrix given in csr format, return true if the don't have the same shape
+// compare the shape of 2 matrices given in csr format, return true if the don't have the same shape
 bool compareMatrixShape(const int,const int *,const int *,const int,const int *,const int *) ;
 
 
