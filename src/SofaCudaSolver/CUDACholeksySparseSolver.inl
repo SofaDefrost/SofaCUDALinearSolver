@@ -32,7 +32,6 @@ template<class TMatrix , class TVector>
 CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
     : Inherit1()
     , d_typePermutation(initData(&d_typePermutation, "permutation", "Type of fill-in reducing permutation"))
-    , f_tol( initData(&f_tol,0.001,"tolerance","tolerance of factorization") )
     {
         sofa::helper::OptionsGroup d_typePermutationOptions(4,"None","RCM" ,"AMD", "METIS");
         d_typePermutationOptions.setSelectedItem(0); // default None

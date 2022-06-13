@@ -57,7 +57,6 @@ public:
 private:
 
     Data<sofa::helper::OptionsGroup> d_typePermutation;
-    Data<double> f_tol; ///< tolerance of factorization
 
     int rows;///< numbuer of rows
     int cols;///< number of columns
