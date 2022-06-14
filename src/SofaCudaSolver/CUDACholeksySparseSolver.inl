@@ -248,7 +248,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
         {
             sofa::helper::ScopedAdvancedTimer symbolicTimer("Symbolic factorization");
             checksolver( cusolverSpXcsrcholAnalysis( handle, rows, nnz, descr, device_RowPtr, device_ColsInd, device_info ) ); // symbolic decomposition
-            cudaDeviceSynchronize();// for the timer
+            cudaStreamSynchronize(stream);// for the timer
         }
 
         checksolver( cusolverSpDcsrcholBufferInfo( handle, rows, nnz, descr, device_values, device_RowPtr, device_ColsInd,
@@ -263,7 +263,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
         sofa::helper::ScopedAdvancedTimer numericTimer("Numeric factorization");
         checksolver(cusolverSpDcsrcholFactor( handle, rows, nnz, descr, device_values, device_RowPtr, device_ColsInd,
                             device_info, buffer_gpu )); // numeric decomposition
-        cudaDeviceSynchronize();// for the timer
+        cudaStreamSynchronize(stream);// for the timer
     }
 
     
@@ -298,20 +298,20 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
     {
         // LL^t y = Pb
         sofa::helper::ScopedAdvancedTimer solveTimer("Solve");
-        checkCudaErrors(cudaDeviceSynchronize());
+        checkCudaErrors(cudaStreamSynchronize(stream));
         checksolver( cusolverSpDcsrcholSolve( handle, n, device_b, device_x, device_info, buffer_gpu ) );
-        checkCudaErrors(cudaDeviceSynchronize());
+        checkCudaErrors(cudaStreamSynchronize(stream));
     }
 
     if( reorder == 0 )
     {
         checkCudaErrors( cudaMemcpyAsync( x.ptr(), device_x, sizeof(SReal)*n, cudaMemcpyDeviceToHost,stream));
-         cudaDeviceSynchronize();
+         cudaStreamSynchronize(stream);
     }
     else
     {
         checkCudaErrors( cudaMemcpyAsync( host_x_permuted, device_x, sizeof(SReal)*n, cudaMemcpyDeviceToHost,stream));
-        cudaDeviceSynchronize();
+        cudaStreamSynchronize(stream);
 
         for(int i = 0; i < n; ++i)
         {
