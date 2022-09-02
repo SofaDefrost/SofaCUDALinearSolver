@@ -47,7 +47,7 @@ inline void __checksolver( cusolverStatus_t status, const char *file, const int 
 {
     if(status != 0)
     {
-        msg_error("SofaCudaSolver") << "Cuda Failure in " << file << " at line "<< line;
+        msg_error("SofaCUDALinearSolver") << "Cuda Failure in " << file << " at line "<< line;
 
         static const std::map<cusolverStatus_t, std::string> statusMap {
             { CUSOLVER_STATUS_SUCCESS, "success" },
@@ -77,7 +77,7 @@ inline void __checksolver( cusolverStatus_t status, const char *file, const int 
             { CUSOLVER_STATUS_INVALID_WORKSPACE, "invalid workspace" },
         };
 
-        msg_error("SofaCudaSolver") << "Status: " << status << " - " << statusMap.at(status);
+        msg_error("SofaCUDALinearSolver") << "Status: " << status << " - " << statusMap.at(status);
         exit(EXIT_FAILURE);
     }
 }

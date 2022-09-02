@@ -19,21 +19,53 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#define SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP
-#include <SofaCudaSolver/CUDACholeksySparseSolver.inl>
+#include <SofaCUDALinearSolver/config.h>
 #include <sofa/core/ObjectFactory.h>
+using sofa::core::ObjectFactory;
 
-namespace sofa::component::linearsolver::direct
+
+extern "C" {
+
+    SOFACUDALINEARSOLVER_API void initExternalModule();
+    SOFACUDALINEARSOLVER_API const char* getModuleName();
+    SOFACUDALINEARSOLVER_API const char* getModuleVersion();
+    SOFACUDALINEARSOLVER_API const char* getModuleLicense();
+    SOFACUDALINEARSOLVER_API const char* getModuleDescription();
+    SOFACUDALINEARSOLVER_API const char* getModuleComponentList();
+}
+
+void initExternalModule()
 {
+    static bool first = true;
+    if (first)
+    {
+        first = false;
+    }
+}
 
-using namespace sofa::linearalgebra;
+const char* getModuleName()
+{
+    return sofa_tostring(SOFA_TARGET);
+}
 
-int CUDASparseCholeskySolverClass = core::RegisterObject("Direct linear solver based on Sparse Cholesky factorization, implemented with the cuSOLVER library")
-    .add< CUDASparseCholeskySolver< CompressedRowSparseMatrix<SReal>,FullVector<SReal> > >()
-    .add< CUDASparseCholeskySolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, SReal> >,FullVector<SReal> > >()
-;
+const char* getModuleLicense()
+{
+    return "";
+}
 
-template class SOFACUDASOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<SReal>,FullVector<SReal> > ;
-template class SOFACUDASOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, SReal> >,FullVector<SReal> > ;
+const char* getModuleVersion()
+{
+    return sofa_tostring(SOFACUDALINEARSOLVER_VERSION);
+}
 
-} // namespace sofa::component::linearsolver::direct
+const char* getModuleDescription()
+{
+    return "Linear solver with resolution on GPU";
+}
+
+const char* getModuleComponentList()
+{
+    /// string containing the names of the classes provided by the plugin
+    static std::string classes = ObjectFactory::getInstance()->listClassesFromTarget(sofa_tostring(SOFA_TARGET));
+    return classes.c_str();
+}

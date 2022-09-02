@@ -21,7 +21,7 @@
 ******************************************************************************/
 #pragma once
 
-#include <SofaCudaSolver/config.h>
+#include <SofaCUDALinearSolver/config.h>
 
 #include <sofa/core/behavior/LinearSolver.h>
 #include <sofa/component/linearsolver/iterative/MatrixLinearSolver.h>
@@ -113,9 +113,9 @@ private:
 // compare the shape of 2 matrices given in csr format, return true if the matrices don't have the same shape
 bool compareMatrixShape(int, const int *,const int *, int,const int *,const int *) ;
 
-#if  !defined(SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP)
-extern template class SOFACUDASOLVER_API CUDASparseCholeskySolver< sofa::linearalgebra::CompressedRowSparseMatrix<SReal>, sofa::linearalgebra::FullVector<SReal> > ;
-extern template class SOFACUDASOLVER_API CUDASparseCholeskySolver< sofa::linearalgebra::CompressedRowSparseMatrix<sofa::type::Mat<3,3,SReal> >, sofa::linearalgebra::FullVector<SReal> > ;
+#if !defined(SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP)
+extern template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< sofa::linearalgebra::CompressedRowSparseMatrix<SReal>, sofa::linearalgebra::FullVector<SReal> > ;
+extern template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< sofa::linearalgebra::CompressedRowSparseMatrix<sofa::type::Mat<3,3,SReal> >, sofa::linearalgebra::FullVector<SReal> > ;
 #endif
 
 } // namespace sofa::component::linearsolver::direct

@@ -21,9 +21,9 @@
 ******************************************************************************/
 #pragma once
 
-#include <SofaCudaSolver/CUDACholeksySparseSolver.h>
+#include <SofaCUDALinearSolver/CUDACholeksySparseSolver.h>
 #include <sofa/helper/ScopedAdvancedTimer.h>
-#include <SofaCudaSolver/utils.h>
+#include <SofaCUDALinearSolver/utils.h>
 #include <cusparse.h>
 
 

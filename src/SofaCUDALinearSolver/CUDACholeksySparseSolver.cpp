@@ -19,23 +19,21 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#pragma once
-
-#include <sofa/config.h>
-
-
-#define SOFACUDASOLVER_VERSION @PROJECT_VERSION@
-
-#ifdef SOFA_BUILD_SOFACUDASOLVER
-#  define SOFA_TARGET @PROJECT_NAME@
-#  define SOFACUDASOLVER_API SOFA_EXPORT_DYNAMIC_LIBRARY
-#else
-#  define SOFACUDASOLVER_API SOFA_IMPORT_DYNAMIC_LIBRARY
-#endif
+#define SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP
+#include <SofaCUDALinearSolver/CUDACholeksySparseSolver.inl>
+#include <sofa/core/ObjectFactory.h>
 
 namespace sofa::component::linearsolver::direct
 {
-	constexpr const char* MODULE_NAME = "@PROJECT_NAME@";
+
+using namespace sofa::linearalgebra;
+
+int CUDASparseCholeskySolverClass = core::RegisterObject("Direct linear solver based on Sparse Cholesky factorization, implemented with the cuSOLVER library")
+    .add< CUDASparseCholeskySolver< CompressedRowSparseMatrix<SReal>,FullVector<SReal> > >()
+    .add< CUDASparseCholeskySolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, SReal> >,FullVector<SReal> > >()
+;
+
+template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<SReal>,FullVector<SReal> > ;
+template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, SReal> >,FullVector<SReal> > ;
+
 } // namespace sofa::component::linearsolver::direct
-
-

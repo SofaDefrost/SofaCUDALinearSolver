@@ -32,6 +32,6 @@ int SolverGPUClass = core::RegisterObject("Direct linear solver based on Sparse 
         .add< SolverGPU< CompressedRowSparseMatrix<SReal>,FullVector<SReal> > >()
         ;
 
-template class SOFACUDASOLVER_API SolverGPU< CompressedRowSparseMatrix<SReal>,FullVector<SReal> > ;
+template class SOFACUDALINEARSOLVER_API SolverGPU< CompressedRowSparseMatrix<SReal>,FullVector<SReal> > ;
 
 } // namespace sofa::component::linearsolver::direct

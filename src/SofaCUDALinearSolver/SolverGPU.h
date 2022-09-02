@@ -21,7 +21,7 @@
 ******************************************************************************/
 #pragma once
 
-#include <SofaCudaSolver/config.h>
+#include <SofaCUDALinearSolver/config.h>
 
 #include <sofa/core/behavior/LinearSolver.h>
 #include <sofa/component/linearsolver/iterative/MatrixLinearSolver.h>
@@ -94,7 +94,7 @@ public:
 };
 
 #if  !defined(SOFA_PLUGIN_SOLVERGPU_CPP)
-extern template class SOFACUDASOLVER_API SolverGPU< sofa::linearalgebra::CompressedRowSparseMatrix<SReal>, sofa::linearalgebra::FullVector<SReal> > ;
+extern template class SOFACUDALINEARSOLVER_API SolverGPU< sofa::linearalgebra::CompressedRowSparseMatrix<SReal>, sofa::linearalgebra::FullVector<SReal> > ;
 #endif
 
 } // namespace sofa::component::linearsolver::direct
