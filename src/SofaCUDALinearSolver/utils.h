@@ -30,6 +30,8 @@
 #include <sofa/helper/logging/Messaging.h>
 
 #define checkCudaErrors(err) __checkCudaErrors(err, __FILE__, __LINE__)
+#define checksolver(status ) __checksolver(status, __FILE__, __LINE__)
+
 
 inline void __checkCudaErrors(cudaError err, const char *file, const int line)
 {
@@ -40,8 +42,6 @@ inline void __checkCudaErrors(cudaError err, const char *file, const int line)
         exit(EXIT_FAILURE);
     }
 }
-
-#define checksolver(status ) __checksolver(status, __FILE__, __LINE__)
 
 inline void __checksolver( cusolverStatus_t status, const char *file, const int line)
 {
@@ -82,3 +82,19 @@ inline void __checksolver( cusolverStatus_t status, const char *file, const int 
     }
 }
 
+namespace SofaCUDALinearSolver
+{
+    inline bool cudaInit()
+    {
+        int device_count;
+        checkCudaErrors(cudaGetDeviceCount(&device_count));
+
+        if (device_count == 0)
+        {
+            msg_error("SofaCUDALinearSolver") << "No device supporting CUDA";
+            return false;
+        }
+
+        return true;
+    }
+}

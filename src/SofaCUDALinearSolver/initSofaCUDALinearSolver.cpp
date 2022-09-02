@@ -21,6 +21,7 @@
 ******************************************************************************/
 #include <SofaCUDALinearSolver/config.h>
 #include <sofa/core/ObjectFactory.h>
+#include <SofaCUDALinearSolver/utils.h>
 using sofa::core::ObjectFactory;
 
 
@@ -32,13 +33,17 @@ extern "C" {
     SOFACUDALINEARSOLVER_API const char* getModuleLicense();
     SOFACUDALINEARSOLVER_API const char* getModuleDescription();
     SOFACUDALINEARSOLVER_API const char* getModuleComponentList();
+    SOFACUDALINEARSOLVER_API bool moduleIsInitialized();
 }
+
+bool isModuleInitialized = false;
 
 void initExternalModule()
 {
     static bool first = true;
     if (first)
     {
+        isModuleInitialized = SofaCUDALinearSolver::cudaInit();
         first = false;
     }
 }
@@ -68,4 +73,9 @@ const char* getModuleComponentList()
     /// string containing the names of the classes provided by the plugin
     static std::string classes = ObjectFactory::getInstance()->listClassesFromTarget(sofa_tostring(SOFA_TARGET));
     return classes.c_str();
+}
+
+bool moduleIsInitialized()
+{
+    return isModuleInitialized;
 }
