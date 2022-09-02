@@ -274,50 +274,57 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
 {
     int n = M.colSize()  ; // avoidable, used to prevent compilation warning
 
-    if( (previous_n!=n) && (reorder !=0) )
+    if( previous_n != n && reorder !=0 )
     {
         if(host_b_permuted) free(host_b_permuted);
         host_b_permuted = (SReal*)malloc(sizeof(SReal)*n);
+
         if(host_x_permuted) free(host_x_permuted);
         host_x_permuted = (SReal*)malloc(sizeof(SReal)*n);
     }
 
-    if( reorder == 0 )
+    if( reorder != 0 )
     {
-        checkCudaErrors( cudaMemcpyAsync( device_b, b.ptr(), sizeof(SReal)*n, cudaMemcpyHostToDevice,stream));
-    }
-    else
-    {
+        sofa::helper::ScopedAdvancedTimer reorderRHSTimer("reorderRHS");
         for(int i = 0; i < n; ++i)
         {
             host_b_permuted[i] = b[ host_perm[i] ];
         }
-        checkCudaErrors( cudaMemcpyAsync( device_b, host_b_permuted, sizeof(SReal)*n, cudaMemcpyHostToDevice,stream));
+    }
+    SReal* host_b = (reorder != 0) ? host_b_permuted : b.ptr();
+    SReal* host_x = (reorder != 0) ? host_x_permuted : x.ptr();
+
+    {
+        sofa::helper::ScopedAdvancedTimer copyRHSToDeviceTimer("copyRHSToDevice");
+        checkCudaErrors(cudaMemcpyAsync( device_b, host_b, sizeof(SReal)*n, cudaMemcpyHostToDevice,stream));
+        checkCudaErrors(cudaStreamSynchronize(stream));
     }
 
     {
         // LL^t y = Pb
         sofa::helper::ScopedAdvancedTimer solveTimer("Solve");
-        checkCudaErrors(cudaStreamSynchronize(stream));
-        checksolver( cusolverSpDcsrcholSolve( handle, n, device_b, device_x, device_info, buffer_gpu ) );
+
+        checksolver(cusolverSpDcsrcholSolve( handle, n, device_b, device_x, device_info, buffer_gpu ));
         checkCudaErrors(cudaStreamSynchronize(stream));
     }
 
-    if( reorder == 0 )
     {
-        checkCudaErrors( cudaMemcpyAsync( x.ptr(), device_x, sizeof(SReal)*n, cudaMemcpyDeviceToHost,stream));
-         cudaStreamSynchronize(stream);
-    }
-    else
-    {
-        checkCudaErrors( cudaMemcpyAsync( host_x_permuted, device_x, sizeof(SReal)*n, cudaMemcpyDeviceToHost,stream));
+        sofa::helper::ScopedAdvancedTimer copySolutionToHostTimer("copySolutionToHost");
+
+        checkCudaErrors(cudaMemcpyAsync( host_x, device_x, sizeof(SReal)*n, cudaMemcpyDeviceToHost,stream));
         cudaStreamSynchronize(stream);
+    }
 
+    if( reorder != 0 )
+    {
+        sofa::helper::ScopedAdvancedTimer reorderSolutionTimer("reorderSolution");
         for(int i = 0; i < n; ++i)
         {
             x[host_perm[i]] = host_x_permuted[ i ]; // Px = y
         }
     }
+
+
     previous_n = n ;
 }
 
