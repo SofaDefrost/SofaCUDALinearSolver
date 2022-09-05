@@ -135,6 +135,8 @@ void CUDASparseCholeskySolver<TMatrix, TVector>::numericFactorization()
 template<class TMatrix , class TVector>
 void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
 {
+    sofa::helper::ScopedAdvancedTimer invertTimer("invert");
+
     {
         sofa::helper::ScopedAdvancedTimer copyTimer("copyMatrixData");
         m_filteredMatrix.copyNonZeros(M);
@@ -146,12 +148,14 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
     cols = m_filteredMatrix.colSize();
     nnz = m_filteredMatrix.getColsValue().size(); // number of non zero coefficients
 
-    // copy the matrix
     host_RowPtr = (int*) m_filteredMatrix.getRowBegin().data();
     host_ColsInd = (int*) m_filteredMatrix.getColsIndex().data();
     host_values = (Real*) m_filteredMatrix.getColsValue().data();
- 
-    notSameShape = compareMatrixShape(rows , host_ColsInd, host_RowPtr, previous_RowPtr.size()-1,  previous_ColsInd.data(), previous_RowPtr.data() );
+
+    {
+        sofa::helper::ScopedAdvancedTimer compareMatrixShapeTimer("compareMatrixShape");
+        notSameShape = compareMatrixShape(rows , host_ColsInd, host_RowPtr, previous_RowPtr.size()-1,  previous_ColsInd.data(), previous_RowPtr.data() );
+    }
 
     // allocate memory
     if(previous_n < rows)
@@ -177,8 +181,10 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
 
     // A = PAQ
     // compute fill reducing permutation
-    if( (reorder != 0) && notSameShape)
+    if( reorder != 0 && notSameShape)
     {
+        sofa::helper::ScopedAdvancedTimer permutationsTimer("Permutations");
+
         host_perm.resize(rows);
 
         switch( reorder )
@@ -215,16 +221,6 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
                                         , host_perm.data(), host_perm.data(), host_map.data(), buffer_cpu ));
     }
 
-    //store the shape of the matrix
-    if(notSameShape)
-    {
-        previous_nnz = nnz ;
-        previous_RowPtr.resize( rows + 1 );
-        previous_ColsInd.resize( nnz );
-        for(int i=0;i<nnz;i++) previous_ColsInd[i] = host_ColsInd[i];
-        for(int i=0; i<rows +1; i++) previous_RowPtr[i] = host_RowPtr[i];
-    }
-    
     // send data to the device
     if (notSameShape)
     {
@@ -235,8 +231,19 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
         checkCudaErrors( cudaMemcpyAsync( device_ColsInd, host_colPtrToCopy, sizeof(int)*nnz, cudaMemcpyHostToDevice, stream ) );
     }
 
+    //store the shape of the matrix
+    if(notSameShape)
+    {
+        previous_nnz = nnz ;
+        previous_RowPtr.resize( rows + 1 );
+        previous_ColsInd.resize( nnz );
+        for(int i=0;i<nnz;i++) previous_ColsInd[i] = host_ColsInd[i];
+        for(int i=0; i<rows +1; i++) previous_RowPtr[i] = host_RowPtr[i];
+    }
+
     if( reorder != 0)
     {
+        sofa::helper::ScopedAdvancedTimer reorderValuesTimer("ReorderValues");
         for(int i=0;i<nnz;i++)
         {
             host_valuePermuted[i] = host_values[ host_map[i] ];
@@ -260,8 +267,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
         }
 
         setWorkspace();
-    
-     
+
         if(buffer_gpu) cudaFree(buffer_gpu);
         checkCudaErrors(cudaMalloc(&buffer_gpu, sizeof(char)*size_work));
     }
@@ -271,8 +277,6 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
         numericFactorization();
         cudaStreamSynchronize(stream);// for the timer
     }
-
-    
 }
 
 template <class TMatrix, class TVector>
@@ -291,6 +295,7 @@ void CUDASparseCholeskySolver<TMatrix, TVector>::solveOnGPU(int n)
 template<class TMatrix , class TVector>
 void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vector& b)
 {
+    sofa::helper::ScopedAdvancedTimer solveTimer("solve");
     int n = M.colSize()  ; // avoidable, used to prevent compilation warning
 
     if( previous_n < n && reorder !=0 )
