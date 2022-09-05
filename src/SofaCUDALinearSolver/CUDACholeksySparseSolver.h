@@ -64,19 +64,20 @@ private:
     int* host_ColsInd;
     Real* host_values;
 
-    int* host_RowPtr_permuted;
-    int* host_ColsInd_permuted;
-    Real* host_values_permuted;
+    // CRS format of the permuted matrix
+    sofa::type::vector<int> host_rowPermuted;
+    sofa::type::vector<int> host_colPermuted;
+    sofa::type::vector<Real> host_valuePermuted;
 
     int* device_RowPtr;
     int* device_ColsInd;
     Real* device_values;
 
-    int* host_perm;
-    int* host_map;
+    sofa::type::vector<int> host_perm;
+    sofa::type::vector<int> host_map;
 
-    Real* host_b_permuted;
-    Real* host_x_permuted;
+    sofa::type::vector<Real> host_bPermuted;
+    sofa::type::vector<Real> host_xPermuted;
 
     cusolverSpHandle_t handle;
     cudaStream_t stream;

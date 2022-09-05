@@ -55,13 +55,6 @@ CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
     host_ColsInd = nullptr;
     host_values = nullptr;
 
-    host_RowPtr_permuted = nullptr;
-    host_ColsInd_permuted = nullptr;
-    host_values_permuted = nullptr;
-
-    host_b_permuted = nullptr;
-    host_x_permuted = nullptr;
-
     device_RowPtr = nullptr;
     device_ColsInd = nullptr;
     device_values = nullptr;
@@ -72,9 +65,6 @@ CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
     buffer_cpu = nullptr;
     buffer_gpu = nullptr;
     device_info = nullptr;
-
-    host_perm = nullptr;
-    host_map = nullptr;
 
     singularity = 0;
 
@@ -96,11 +86,7 @@ CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
 
 template<class TMatrix , class TVector>
 CUDASparseCholeskySolver<TMatrix,TVector>::~CUDASparseCholeskySolver()
-{ 
-    if(host_RowPtr_permuted) free(host_RowPtr_permuted);
-    if(host_ColsInd_permuted) free(host_ColsInd_permuted);
-    if(host_values_permuted) free(host_values_permuted);
-
+{
     previous_RowPtr.clear();
     previous_ColsInd.clear();
 
@@ -172,8 +158,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
     {
         checkCudaErrors(cudaMalloc( &device_RowPtr, sizeof(int)*( rows +1) ));
 
-        if(host_RowPtr_permuted) free(host_RowPtr_permuted);
-        host_RowPtr_permuted = (int*)malloc(sizeof(int)*(rows+1));
+        host_rowPermuted.resize(rows + 1);
 
         checkCudaErrors(cudaMalloc(&device_x, sizeof(Real)*cols));
         checkCudaErrors(cudaMalloc(&device_b, sizeof(Real)*cols));
@@ -186,18 +171,15 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
         if(device_values) cudaFree(device_values);
         checkCudaErrors(cudaMalloc( &device_values, sizeof(Real)*nnz ));
 
-        if(host_ColsInd_permuted) free(host_ColsInd_permuted);
-        host_ColsInd_permuted = (int*)malloc(sizeof(int)*nnz);
-        if(host_values_permuted) free(host_values_permuted);
-        host_values_permuted = (Real*)malloc(sizeof(Real)*nnz);
+        host_colPermuted.resize(nnz);
+        host_valuePermuted.resize(nnz);
     }
 
     // A = PAQ
     // compute fill reducing permutation
     if( (reorder != 0) && notSameShape)
     {
-        if(host_perm) free(host_perm);
-        host_perm =(int*) malloc(sizeof( int )*rows );
+        host_perm.resize(rows);
 
         switch( reorder )
         {
@@ -206,32 +188,31 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
                 break;
 
             case 1://RCM, Symmetric Reverse Cuthill-McKee permutation
-                checksolver( cusolverSpXcsrsymrcmHost(handle, rows, nnz, descr, host_RowPtr, host_ColsInd, host_perm) );
+                checksolver( cusolverSpXcsrsymrcmHost(handle, rows, nnz, descr, host_RowPtr, host_ColsInd, host_perm.data()) );
                 break;
 
             case 2://AMD, Symetric Minimum Degree Approximation
-                checksolver( cusolverSpXcsrsymamdHost(handle, rows, nnz, descr, host_RowPtr, host_ColsInd, host_perm) );
+                checksolver( cusolverSpXcsrsymamdHost(handle, rows, nnz, descr, host_RowPtr, host_ColsInd, host_perm.data()) );
                 break;
 
             case 3://METIS, nested dissection
-                checksolver( cusolverSpXcsrmetisndHost(handle, rows, nnz, descr, host_RowPtr, host_ColsInd, nullptr, host_perm) );
+                checksolver( cusolverSpXcsrmetisndHost(handle, rows, nnz, descr, host_RowPtr, host_ColsInd, nullptr, host_perm.data()) );
                 break;
         }
         checksolver( cusolverSpXcsrperm_bufferSizeHost(handle, rows, cols, nnz, descr, host_RowPtr, host_ColsInd
-                                                    , host_perm, host_perm, &size_perm) );
+                                                    , host_perm.data(), host_perm.data(), &size_perm) );
 
         if(buffer_cpu) free(buffer_cpu);
         buffer_cpu = (void*)malloc(sizeof(char)*size_perm) ;
 
-        if(host_map) free(host_map);
-        host_map = (int*)malloc(sizeof(int)*nnz);
-        for(int i=0;i<nnz;i++) host_map[i] = i;
-        
+        host_map.resize(nnz);
+        std::iota(host_map.begin(), host_map.end(), 0);
+
         //apply the permutation
-        for(int i=0;i<rows+1;i++) host_RowPtr_permuted[i] = host_RowPtr[i];
-        for(int i=0;i<nnz;i++) host_ColsInd_permuted[i] = host_ColsInd[i];
-        checksolver( cusolverSpXcsrpermHost( handle, rows, cols, nnz, descr, host_RowPtr_permuted, host_ColsInd_permuted
-                                        , host_perm, host_perm, host_map, buffer_cpu ));
+        for(int i=0;i<rows+1;i++) host_rowPermuted[i] = host_RowPtr[i];
+        for(int i=0;i<nnz;i++) host_colPermuted[i] = host_ColsInd[i];
+        checksolver( cusolverSpXcsrpermHost( handle, rows, cols, nnz, descr, host_rowPermuted.data(), host_colPermuted.data()
+                                        , host_perm.data(), host_perm.data(), host_map.data(), buffer_cpu ));
     }
 
     //store the shape of the matrix
@@ -247,8 +228,8 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
     // send data to the device
     if (notSameShape)
     {
-        const int* host_rowPtrToCopy = reorder != 0 ? host_RowPtr_permuted : host_RowPtr;
-        const int* host_colPtrToCopy = reorder != 0 ? host_ColsInd_permuted : host_ColsInd;
+        const int* host_rowPtrToCopy = reorder != 0 ? host_rowPermuted.data() : host_RowPtr;
+        const int* host_colPtrToCopy = reorder != 0 ? host_colPermuted.data() : host_ColsInd;
 
         checkCudaErrors( cudaMemcpyAsync( device_RowPtr, host_rowPtrToCopy, sizeof(int)*(rows+1), cudaMemcpyHostToDevice, stream) );
         checkCudaErrors( cudaMemcpyAsync( device_ColsInd, host_colPtrToCopy, sizeof(int)*nnz, cudaMemcpyHostToDevice, stream ) );
@@ -258,12 +239,12 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
     {
         for(int i=0;i<nnz;i++)
         {
-            host_values_permuted[i] = host_values[ host_map[i] ];
+            host_valuePermuted[i] = host_values[ host_map[i] ];
         }
     }
 
     {
-        const Real* hostValuesToCopy = reorder != 0 ? host_values_permuted : host_values;
+        const Real* hostValuesToCopy = reorder != 0 ? host_valuePermuted.data() : host_values;
         checkCudaErrors( cudaMemcpyAsync( device_values, hostValuesToCopy, sizeof(Real)*nnz, cudaMemcpyHostToDevice, stream ) );
     }
     
@@ -314,11 +295,8 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
 
     if( previous_n < n && reorder !=0 )
     {
-        if(host_b_permuted) free(host_b_permuted);
-        host_b_permuted = (Real*)malloc(sizeof(Real)*n);
-
-        if(host_x_permuted) free(host_x_permuted);
-        host_x_permuted = (Real*)malloc(sizeof(Real)*n);
+        host_bPermuted.resize(n);
+        host_xPermuted.resize(n);
     }
 
     if( reorder != 0 )
@@ -326,11 +304,11 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
         sofa::helper::ScopedAdvancedTimer reorderRHSTimer("reorderRHS");
         for(int i = 0; i < n; ++i)
         {
-            host_b_permuted[i] = b[ host_perm[i] ];
+            host_bPermuted[i] = b[ host_perm[i] ];
         }
     }
-    Real* host_b = (reorder != 0) ? host_b_permuted : b.ptr();
-    Real* host_x = (reorder != 0) ? host_x_permuted : x.ptr();
+    Real* host_b = (reorder != 0) ? host_bPermuted.data() : b.ptr();
+    Real* host_x = (reorder != 0) ? host_xPermuted.data() : x.ptr();
 
     {
         sofa::helper::ScopedAdvancedTimer copyRHSToDeviceTimer("copyRHSToDevice");
@@ -358,7 +336,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
         sofa::helper::ScopedAdvancedTimer reorderSolutionTimer("reorderSolution");
         for(int i = 0; i < n; ++i)
         {
-            x[host_perm[i]] = host_x_permuted[ i ]; // Px = y
+            x[host_perm[i]] = host_xPermuted[ i ]; // Px = y
         }
     }
 
