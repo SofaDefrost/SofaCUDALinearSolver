@@ -21,6 +21,7 @@
 ******************************************************************************/
 #define SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP
 #include <SofaCUDALinearSolver/CUDACholeksySparseSolver.inl>
+#include <sofa/component/linearsolver/iterative/MatrixLinearSolver.inl>
 #include <sofa/core/ObjectFactory.h>
 
 namespace sofa::component::linearsolver::direct
@@ -29,11 +30,19 @@ namespace sofa::component::linearsolver::direct
 using namespace sofa::linearalgebra;
 
 int CUDASparseCholeskySolverClass = core::RegisterObject("Direct linear solver based on Sparse Cholesky factorization, implemented with the cuSOLVER library")
-    .add< CUDASparseCholeskySolver< CompressedRowSparseMatrix<SReal>,FullVector<SReal> > >()
-    .add< CUDASparseCholeskySolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, SReal> >,FullVector<SReal> > >()
+    .add< CUDASparseCholeskySolver< CompressedRowSparseMatrix<float>,FullVector<float> > >()
+    .add< CUDASparseCholeskySolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, float> >,FullVector<float> > >()
+    .add< CUDASparseCholeskySolver< CompressedRowSparseMatrix<double>,FullVector<double> > >()
+    .add< CUDASparseCholeskySolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, double> >,FullVector<double> > >()
 ;
 
-template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<SReal>,FullVector<SReal> > ;
-template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, SReal> >,FullVector<SReal> > ;
+using OtherFloatingType = std::conditional_t<std::is_same_v<SReal, double>, float, double>;
+template class SOFACUDALINEARSOLVER_API sofa::component::linearsolver::MatrixLinearSolver< CompressedRowSparseMatrix<OtherFloatingType>,FullVector<OtherFloatingType> > ;
+template class SOFACUDALINEARSOLVER_API sofa::component::linearsolver::MatrixLinearSolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, OtherFloatingType> >,FullVector<OtherFloatingType> > ;
+
+template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<float>,FullVector<float> > ;
+template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, float> >,FullVector<float> > ;
+template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<double>,FullVector<double> > ;
+template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, double> >,FullVector<double> > ;
 
 } // namespace sofa::component::linearsolver::direct

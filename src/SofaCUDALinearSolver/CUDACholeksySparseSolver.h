@@ -47,12 +47,13 @@ public:
 
     void solve (Matrix& M, Vector& x, Vector& b) override;
     void invert(Matrix& M) override;
+    void solveOnGPU(int n);
 
 private:
 
     Data<sofa::helper::OptionsGroup> d_typePermutation;
 
-    int rows;///< numbuer of rows
+    int rows;///< number of rows
     int cols;///< number of columns
     int nnz;///< number of non zero elements
 
@@ -61,21 +62,21 @@ private:
     // csr format
     int* host_RowPtr; 
     int* host_ColsInd;
-    SReal* host_values;
+    Real* host_values;
 
     int* host_RowPtr_permuted;
     int* host_ColsInd_permuted;
-    SReal* host_values_permuted;
+    Real* host_values_permuted;
 
     int* device_RowPtr;
     int* device_ColsInd;
-    SReal* device_values;
+    Real* device_values;
 
     int* host_perm;
     int* host_map;
 
-    SReal* host_b_permuted;
-    SReal* host_x_permuted;
+    Real* host_b_permuted;
+    Real* host_x_permuted;
 
     cusolverSpHandle_t handle;
     cudaStream_t stream;
@@ -88,8 +89,8 @@ private:
     size_t size_work;
     size_t size_perm;
 
-    SReal* device_x;
-    SReal* device_b;
+    Real* device_x;
+    Real* device_b;
 
     void* buffer_gpu;
     void* buffer_cpu;
@@ -106,6 +107,8 @@ private:
 
     CUDASparseCholeskySolver();
     ~CUDASparseCholeskySolver() override;
+    void setWorkspace();
+    void numericFactorization();
 
     sofa::linearalgebra::CompressedRowSparseMatrix<Real> m_filteredMatrix;
     
@@ -114,8 +117,10 @@ private:
 bool compareMatrixShape(int, const int *,const int *, int,const int *,const int *) ;
 
 #if !defined(SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP)
-extern template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< sofa::linearalgebra::CompressedRowSparseMatrix<SReal>, sofa::linearalgebra::FullVector<SReal> > ;
-extern template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< sofa::linearalgebra::CompressedRowSparseMatrix<sofa::type::Mat<3,3,SReal> >, sofa::linearalgebra::FullVector<SReal> > ;
+    extern template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<float>,FullVector<float> > ;
+    extern template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, float> >,FullVector<float> > ;
+    extern template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<double>,FullVector<double> > ;
+    extern template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, double> >,FullVector<double> > ;
 #endif
 
 } // namespace sofa::component::linearsolver::direct
