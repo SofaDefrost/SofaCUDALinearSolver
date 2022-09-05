@@ -95,6 +95,12 @@ namespace SofaCUDALinearSolver
             return false;
         }
 
+        int major=-1,minor=-1,patch=-1;
+        cusolverGetProperty(MAJOR_VERSION, &major);
+        cusolverGetProperty(MINOR_VERSION, &minor);
+        cusolverGetProperty(PATCH_LEVEL, &patch);
+        printf("CUSOLVER Version: %d.%d.%d\n", major,minor,patch);
+
         return true;
     }
 }
