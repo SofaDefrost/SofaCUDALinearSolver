@@ -34,10 +34,15 @@ template<class TMatrix , class TVector>
 CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
     : Inherit1()
     , d_typePermutation(initData(&d_typePermutation, "permutation", "Type of fill-in reducing permutation"))
+    , d_hardware(initData(&d_hardware, "hardware", "On which hardware to solve the linear system: CPU or GPU"))
 {
-    sofa::helper::OptionsGroup d_typePermutationOptions(4,"None","RCM" ,"AMD", "METIS");
-    d_typePermutationOptions.setSelectedItem(0); // default None
-    d_typePermutation.setValue(d_typePermutationOptions);
+    sofa::helper::OptionsGroup typePermutationOptions(4,"None","RCM" ,"AMD", "METIS");
+    typePermutationOptions.setSelectedItem(0); // default None
+    d_typePermutation.setValue(typePermutationOptions);
+
+    sofa::helper::OptionsGroup hardwareOptions(2,"CPU", "GPU");
+    hardwareOptions.setSelectedItem(1);
+    d_hardware.setValue(hardwareOptions);
 
     cusolverSpCreate(&handle);
     cusparseCreate(&cusparseHandle);
@@ -65,6 +70,7 @@ CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
     buffer_cpu = nullptr;
     buffer_gpu = nullptr;
     device_info = nullptr;
+    host_info = nullptr;
 
     singularity = 0;
 
@@ -98,6 +104,7 @@ CUDASparseCholeskySolver<TMatrix,TVector>::~CUDASparseCholeskySolver()
 
     cusolverSpDestroy(handle);
     cusolverSpDestroyCsrcholInfo(device_info);
+    cusolverSpDestroyCsrcholInfoHost(host_info);
     cusparseDestroyMatDescr(descr);
     cudaStreamDestroy(stream);
 }
@@ -105,30 +112,102 @@ CUDASparseCholeskySolver<TMatrix,TVector>::~CUDASparseCholeskySolver()
 template <class TMatrix, class TVector>
 void CUDASparseCholeskySolver<TMatrix, TVector>::setWorkspace()
 {
-    if constexpr (std::is_same_v<Real, double>)
+    if (d_hardware.getValue().getSelectedId() == 0)
     {
-        checksolver(cusolverSpDcsrcholBufferInfo( handle, rows, nnz, descr, device_values, device_RowPtr, device_ColsInd,
-            device_info, &size_internal, &size_work ));
+        const int* hRow = reorder != 0 ? host_rowPermuted.data() : host_RowPtr;
+        const int* hCol = reorder != 0 ? host_colPermuted.data() : host_ColsInd;
+        const Real* hValues = reorder != 0 ? host_valuePermuted.data() : host_values;
+
+        if constexpr (std::is_same_v<Real, double>)
+        {
+            checksolver(cusolverSpDcsrcholBufferInfoHost( handle, rows, nnz, descr, hValues, hRow, hCol,
+                host_info, &size_internal, &size_work ));
+        }
+        else
+        {
+            checksolver(cusolverSpScsrcholBufferInfoHost( handle, rows, nnz, descr, device_values, hRow, hCol,
+                host_info, &size_internal, &size_work ));
+        }
     }
     else
     {
-        checksolver(cusolverSpScsrcholBufferInfo( handle, rows, nnz, descr, device_values, device_RowPtr, device_ColsInd,
-            device_info, &size_internal, &size_work ));
+        if constexpr (std::is_same_v<Real, double>)
+        {
+            checksolver(cusolverSpDcsrcholBufferInfo( handle, rows, nnz, descr, device_values, device_RowPtr, device_ColsInd,
+                device_info, &size_internal, &size_work ));
+        }
+        else
+        {
+            checksolver(cusolverSpScsrcholBufferInfo( handle, rows, nnz, descr, device_values, device_RowPtr, device_ColsInd,
+                device_info, &size_internal, &size_work ));
+        }
     }
 }
 
 template <class TMatrix, class TVector>
 void CUDASparseCholeskySolver<TMatrix, TVector>::numericFactorization()
 {
-    if constexpr (std::is_same_v<Real, double>)
+    if (d_hardware.getValue().getSelectedId() == 0)
     {
-        checksolver(cusolverSpDcsrcholFactor( handle, rows, nnz, descr, device_values, device_RowPtr, device_ColsInd,
-            device_info, buffer_gpu ));
+        const int* hRow = reorder != 0 ? host_rowPermuted.data() : host_RowPtr;
+        const int* hCol = reorder != 0 ? host_colPermuted.data() : host_ColsInd;
+        const Real* hValues = reorder != 0 ? host_valuePermuted.data() : host_values;
+
+        if constexpr (std::is_same_v<Real, double>)
+        {
+            checksolver(cusolverSpDcsrcholFactorHost( handle, rows, nnz, descr, hValues, hRow, hCol,
+                host_info, buffer_gpu ));
+        }
+        else
+        {
+            checksolver(cusolverSpScsrcholFactorHost( handle, rows, nnz, descr, hValues, hRow, hCol,
+                host_info, buffer_gpu ));
+        }
     }
     else
     {
-        checksolver(cusolverSpScsrcholFactor( handle, rows, nnz, descr, device_values, device_RowPtr, device_ColsInd,
-            device_info, buffer_gpu ));
+        if constexpr (std::is_same_v<Real, double>)
+        {
+            checksolver(cusolverSpDcsrcholFactor( handle, rows, nnz, descr, device_values, device_RowPtr, device_ColsInd,
+                device_info, buffer_gpu ));
+        }
+        else
+        {
+            checksolver(cusolverSpScsrcholFactor( handle, rows, nnz, descr, device_values, device_RowPtr, device_ColsInd,
+                device_info, buffer_gpu ));
+        }
+    }
+}
+
+template <class TMatrix, class TVector>
+void CUDASparseCholeskySolver<TMatrix, TVector>::createCholeskyInfo()
+{
+    cusolverSpDestroyCsrcholInfo(device_info);
+    cusolverSpDestroyCsrcholInfoHost(host_info);
+
+    if (d_hardware.getValue().getSelectedId() == 0)
+    {
+        checksolver(cusolverSpCreateCsrcholInfoHost(&host_info));
+    }
+    else
+    {
+        checksolver(cusolverSpCreateCsrcholInfo(&device_info));
+    }
+}
+
+template <class TMatrix, class TVector>
+void CUDASparseCholeskySolver<TMatrix, TVector>::symbolicFactorization()
+{
+    if (d_hardware.getValue().getSelectedId() == 0)
+    {
+        const int* hRow = reorder != 0 ? host_rowPermuted.data() : host_RowPtr;
+        const int* hCol = reorder != 0 ? host_colPermuted.data() : host_ColsInd;
+        checksolver(cusolverSpXcsrcholAnalysisHost( handle, rows, nnz, descr, hRow, hCol, host_info ));
+    }
+    else
+    {
+        checksolver(cusolverSpXcsrcholAnalysis( handle, rows, nnz, descr, device_RowPtr, device_ColsInd, device_info ));
+        cudaStreamSynchronize(stream);// for the timer
     }
 }
 
@@ -160,21 +239,26 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
     // allocate memory
     if(previous_n < rows)
     {
-        checkCudaErrors(cudaMalloc( &device_RowPtr, sizeof(int)*( rows +1) ));
-
         host_rowPermuted.resize(rows + 1);
 
-        checkCudaErrors(cudaMalloc(&device_x, sizeof(Real)*cols));
-        checkCudaErrors(cudaMalloc(&device_b, sizeof(Real)*cols));
+        if (d_hardware.getValue().getSelectedId() != 0)
+        {
+            checkCudaErrors(cudaMalloc( &device_RowPtr, sizeof(int)*( rows +1) ));
+
+            checkCudaErrors(cudaMalloc(&device_x, sizeof(Real)*cols));
+            checkCudaErrors(cudaMalloc(&device_b, sizeof(Real)*cols));
+        }
     }
 
     if(previous_nnz < nnz)
     {
-        if(device_ColsInd) cudaFree(device_ColsInd);
-        checkCudaErrors(cudaMalloc( &device_ColsInd, sizeof(int)*nnz ));
-        if(device_values) cudaFree(device_values);
-        checkCudaErrors(cudaMalloc( &device_values, sizeof(Real)*nnz ));
-
+        if (d_hardware.getValue().getSelectedId() != 0)
+        {
+            if(device_ColsInd) cudaFree(device_ColsInd);
+            checkCudaErrors(cudaMalloc( &device_ColsInd, sizeof(int)*nnz ));
+            if(device_values) cudaFree(device_values);
+            checkCudaErrors(cudaMalloc( &device_values, sizeof(Real)*nnz ));
+        }
         host_colPermuted.resize(nnz);
         host_valuePermuted.resize(nnz);
     }
@@ -222,7 +306,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
     }
 
     // send data to the device
-    if (notSameShape)
+    if (notSameShape && d_hardware.getValue().getSelectedId() != 0)
     {
         const int* host_rowPtrToCopy = reorder != 0 ? host_rowPermuted.data() : host_RowPtr;
         const int* host_colPtrToCopy = reorder != 0 ? host_colPermuted.data() : host_ColsInd;
@@ -250,6 +334,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
         }
     }
 
+    if (d_hardware.getValue().getSelectedId() != 0)
     {
         const Real* hostValuesToCopy = reorder != 0 ? host_valuePermuted.data() : host_values;
         checkCudaErrors( cudaMemcpyAsync( device_values, hostValuesToCopy, sizeof(Real)*nnz, cudaMemcpyHostToDevice, stream ) );
@@ -258,18 +343,23 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
     // factorize on device LL^t = PAP^t 
     if(notSameShape)
     {
-        if(device_info) cusolverSpDestroyCsrcholInfo(device_info);
-        checksolver(cusolverSpCreateCsrcholInfo(&device_info));
+        createCholeskyInfo();
         {
             sofa::helper::ScopedAdvancedTimer symbolicTimer("Symbolic factorization");
-            checksolver( cusolverSpXcsrcholAnalysis( handle, rows, nnz, descr, device_RowPtr, device_ColsInd, device_info ) ); // symbolic decomposition
-            cudaStreamSynchronize(stream);// for the timer
+            symbolicFactorization();
         }
 
         setWorkspace();
 
         if(buffer_gpu) cudaFree(buffer_gpu);
-        checkCudaErrors(cudaMalloc(&buffer_gpu, sizeof(char)*size_work));
+        if (d_hardware.getValue().getSelectedId() == 0)
+        {
+            checkCudaErrors(cudaMallocHost(&buffer_gpu, sizeof(char)*size_work));
+        }
+        else
+        {
+            checkCudaErrors(cudaMalloc(&buffer_gpu, sizeof(char)*size_work));
+        }
     }
     
     {
@@ -280,15 +370,32 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
 }
 
 template <class TMatrix, class TVector>
-void CUDASparseCholeskySolver<TMatrix, TVector>::solveOnGPU(int n)
+void CUDASparseCholeskySolver<TMatrix, TVector>::solve_impl(int n, Real* b, Real* x)
 {
-    if constexpr (std::is_same_v<Real, double>)
+    if (d_hardware.getValue().getSelectedId() == 0)
     {
-        checksolver(cusolverSpDcsrcholSolve( handle, n, device_b, device_x, device_info, buffer_gpu ));
+        Real* host_b = (reorder != 0) ? host_bPermuted.data() : b;
+        Real* host_x = (reorder != 0) ? host_xPermuted.data() : x;
+
+        if constexpr (std::is_same_v<Real, double>)
+        {
+            checksolver(cusolverSpDcsrcholSolveHost( handle, n, host_b, host_x, host_info, buffer_gpu ));
+        }
+        else
+        {
+            checksolver(cusolverSpScsrcholSolveHost( handle, n, host_b, host_x, host_info, buffer_gpu ));
+        }
     }
     else
     {
-        checksolver(cusolverSpScsrcholSolve( handle, n, device_b, device_x, device_info, buffer_gpu ));
+        if constexpr (std::is_same_v<Real, double>)
+        {
+            checksolver(cusolverSpDcsrcholSolve( handle, n, device_b, device_x, device_info, buffer_gpu ));
+        }
+        else
+        {
+            checksolver(cusolverSpScsrcholSolve( handle, n, device_b, device_x, device_info, buffer_gpu ));
+        }
     }
 }
 
@@ -315,6 +422,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
     Real* host_b = (reorder != 0) ? host_bPermuted.data() : b.ptr();
     Real* host_x = (reorder != 0) ? host_xPermuted.data() : x.ptr();
 
+    if (d_hardware.getValue().getSelectedId() != 0)
     {
         sofa::helper::ScopedAdvancedTimer copyRHSToDeviceTimer("copyRHSToDevice");
         checkCudaErrors(cudaMemcpyAsync( device_b, host_b, sizeof(Real)*n, cudaMemcpyHostToDevice,stream));
@@ -325,10 +433,11 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
         // LL^t y = Pb
         sofa::helper::ScopedAdvancedTimer solveTimer("Solve");
 
-        solveOnGPU(n);
+        solve_impl(n, x.ptr(), b.ptr());
         checkCudaErrors(cudaStreamSynchronize(stream));
     }
 
+    if (d_hardware.getValue().getSelectedId() != 0)
     {
         sofa::helper::ScopedAdvancedTimer copySolutionToHostTimer("copySolutionToHost");
 

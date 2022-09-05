@@ -47,11 +47,12 @@ public:
 
     void solve (Matrix& M, Vector& x, Vector& b) override;
     void invert(Matrix& M) override;
-    void solveOnGPU(int n);
+    void solve_impl(int n, Real* b, Real* x);
 
 private:
 
     Data<sofa::helper::OptionsGroup> d_typePermutation;
+    Data<sofa::helper::OptionsGroup> d_hardware;
 
     int rows;///< number of rows
     int cols;///< number of columns
@@ -85,6 +86,7 @@ private:
     cusparseMatDescr_t descr;
 
     csrcholInfo_t device_info ;
+    csrcholInfoHost_t host_info;
 
     size_t size_internal;
     size_t size_work;
@@ -110,6 +112,8 @@ private:
     ~CUDASparseCholeskySolver() override;
     void setWorkspace();
     void numericFactorization();
+    void createCholeskyInfo();
+    void symbolicFactorization();
 
     sofa::linearalgebra::CompressedRowSparseMatrix<Real> m_filteredMatrix;
     
