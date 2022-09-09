@@ -281,7 +281,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
                 checksolver( cusolverSpXcsrsymrcmHost(handle, rows, nnz, descr, host_RowPtr, host_ColsInd, host_perm.data()) );
                 break;
 
-            case 2://AMD, Symetric Minimum Degree Approximation
+            case 2://AMD, Symmetric Approximate Minimum Degree Algorithm based on Quotient Graph
                 checksolver( cusolverSpXcsrsymamdHost(handle, rows, nnz, descr, host_RowPtr, host_ColsInd, host_perm.data()) );
                 break;
 
