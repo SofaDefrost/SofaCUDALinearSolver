@@ -52,8 +52,6 @@ Included By
 
 - :ref:`file_src_SofaCUDALinearSolver_CUDACholeksySparseSolver.inl`
 
-- :ref:`file_src_SofaCUDALinearSolver_initSofaCUDALinearSolver.cpp`
-
 
 
 

@@ -19,7 +19,6 @@ Files
 - :ref:`file_src_SofaCUDALinearSolver_CUDACholeksySparseSolver.cpp`
 - :ref:`file_src_SofaCUDALinearSolver_CUDACholeksySparseSolver.h`
 - :ref:`file_src_SofaCUDALinearSolver_CUDACholeksySparseSolver.inl`
-- :ref:`file_src_SofaCUDALinearSolver_initSofaCUDALinearSolver.cpp`
 - :ref:`file_src_SofaCUDALinearSolver_utils.h`
 
 

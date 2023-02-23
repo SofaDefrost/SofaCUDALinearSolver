@@ -40,9 +40,4 @@ Files
 .. toctree::
    :maxdepth: 5
 
-   file_src_SofaCUDALinearSolver_initSofaCUDALinearSolver.cpp.rst
-
-.. toctree::
-   :maxdepth: 5
-
    file_src_SofaCUDALinearSolver_utils.h.rst
