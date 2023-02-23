@@ -3,6 +3,8 @@
 A plugin for SOFA providing direct linear solver on GPU.
 The implementation is based on CUDA and the cuSolver library.
 
+Documentation: https://sofadefrost.github.io/SofaCUDALinearSolver/
+
 ## Dependencies
 
 CUDA toolkit
