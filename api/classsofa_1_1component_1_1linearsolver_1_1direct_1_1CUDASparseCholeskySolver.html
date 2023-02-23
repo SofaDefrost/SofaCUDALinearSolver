@@ -1,0 +1,551 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template Class CUDASparseCholeskySolver &#8212; SofaCUDALinearSolver  documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Function __checkCudaErrors" href="function_utils_8h_1a68f18130573d44970cc9c1869a606f59.html" />
+    <link rel="prev" title="Namespace SofaCUDALinearSolver" href="namespace_SofaCUDALinearSolver.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">SofaCUDALinearSolver  documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="library_root.html">
+   Library API
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_sofa.html">
+     Namespace sofa
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_sofa__component.html">
+     Namespace sofa::component
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_sofa__component__linearsolver.html">
+     Namespace sofa::component::linearsolver
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_sofa__component__linearsolver__direct.html">
+     Namespace sofa::component::linearsolver::direct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_sofa__linearalgebra.html">
+     Namespace sofa::linearalgebra
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_SofaCUDALinearSolver.html">
+     Namespace SofaCUDALinearSolver
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Template Class CUDASparseCholeskySolver
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_utils_8h_1a68f18130573d44970cc9c1869a606f59.html">
+     Function __checkCudaErrors
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_utils_8h_1a9d5d37f41be38eabce6249406f92c147.html">
+     Function __checksolver
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1a925f86586ba8483514c39b8195865172.html">
+     Function getModuleComponentList
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1ae97f7737e707fc56a505aad155cad50f.html">
+     Function getModuleDescription
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1a89120c5d3a2d8abeb8a06bd97244b1bb.html">
+     Function getModuleLicense
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1a46fad1aeab8d4b22de640eb81251b2f9.html">
+     Function getModuleName
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1a44ed889b5f8bb76b6bd8ac4f4b50f34c.html">
+     Function getModuleVersion
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1ab683be1172f7e066d5afa4dc629dfca8.html">
+     Function initExternalModule
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1a86935684c3859891350f7db369490d33.html">
+     Function moduleIsInitialized
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_namespacesofa_1_1component_1_1linearsolver_1_1direct_1aac02b3f96d71cc4229b9ea1795d661bf.html">
+     Function sofa::component::linearsolver::direct::compareMatrixShape
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_namespaceSofaCUDALinearSolver_1acbd2bb8247e3cf7bbfb9f7f9d9f31600.html">
+     Function SofaCUDALinearSolver::cudaInit
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="variable_initSofaCUDALinearSolver_8cpp_1abb52f3d45d9d14cb73d042af4f90a8f7.html">
+     Variable isModuleInitialized
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="variable_namespacesofa_1_1component_1_1linearsolver_1_1direct_1a81ee0e6bd742b122690a7ac0352d234c.html">
+     Template Variable sofa::component::linearsolver::direct::CUDASparseCholeskySolver&lt; CompressedRowSparseMatrix&lt; double &gt;, FullVector&lt; double &gt; &gt;
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="variable_namespacesofa_1_1component_1_1linearsolver_1_1direct_1aa94ed5cb6e5cf80c6b969af5ce8b596d.html">
+     Template Variable sofa::component::linearsolver::direct::CUDASparseCholeskySolver&lt; CompressedRowSparseMatrix&lt; float &gt;, FullVector&lt; float &gt; &gt;
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="variable_namespacesofa_1_1component_1_1linearsolver_1_1direct_1ab118ef68311be2759a9ae2984f30ee47.html">
+     Variable sofa::component::linearsolver::direct::CUDASparseCholeskySolverClass
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="define_utils_8h_1a0dc2509fe91ff83747bb2f336c2c0d44.html">
+     Define checkCudaErrors
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="define_utils_8h_1affad5b16e01b3da52fa1a44786b8bedb.html">
+     Define checksolver
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="define_CUDACholeksySparseSolver_8cpp_1a3decdc8b418bb7013cef2546ab2fdd10.html">
+     Define SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="typedef_namespacesofa_1_1component_1_1linearsolver_1_1direct_1a595c95f8aa8bffa466673a4606eea1d2.html">
+     Typedef sofa::component::linearsolver::direct::OtherFloatingType
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+<a href="https://github.com/SofaDefrost/SofaCUDALinearSolver"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="bottom"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/api/classsofa_1_1component_1_1linearsolver_1_1direct_1_1CUDASparseCholeskySolver.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#inheritance-relationships">
+   Inheritance Relationships
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#base-type">
+     Base Type
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#class-documentation">
+   Class Documentation
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Template Class CUDASparseCholeskySolver</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#inheritance-relationships">
+   Inheritance Relationships
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#base-type">
+     Base Type
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#class-documentation">
+   Class Documentation
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <div class="section" id="template-class-cudasparsecholeskysolver">
+<span id="exhale-class-classsofa-1-1component-1-1linearsolver-1-1direct-1-1cudasparsecholeskysolver"></span><h1>Template Class CUDASparseCholeskySolver<a class="headerlink" href="#template-class-cudasparsecholeskysolver" title="Permalink to this headline">#</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file_src_SofaCUDALinearSolver_CUDACholeksySparseSolver.h.html#file-src-sofacudalinearsolver-cudacholeksysparsesolver-h"><span class="std std-ref">File CUDACholeksySparseSolver.h</span></a></p></li>
+</ul>
+<div class="section" id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">#</a></h2>
+<div class="section" id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">sofa::component::linearsolver::MatrixLinearSolver&lt;</span> <span class="pre">TMatrix,</span> <span class="pre">TVector</span> <span class="pre">&gt;</span></code></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">#</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN4sofa9component12linearsolver6direct24CUDASparseCholeskySolverE">
+<span id="_CPPv3I00EN4sofa9component12linearsolver6direct24CUDASparseCholeskySolverE"></span><span id="_CPPv2I00EN4sofa9component12linearsolver6direct24CUDASparseCholeskySolverE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TMatrix</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TVector</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classsofa_1_1component_1_1linearsolver_1_1direct_1_1CUDASparseCholeskySolver"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDASparseCholeskySolver</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">sofa</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">component</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">linearsolver</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">MatrixLinearSolver</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN4sofa9component12linearsolver6direct24CUDASparseCholeskySolverE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::TMatrix"><span class="n"><span class="pre">TMatrix</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN4sofa9component12linearsolver6direct24CUDASparseCholeskySolverE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::TVector"><span class="n"><span class="pre">TVector</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I00EN4sofa9component12linearsolver6direct24CUDASparseCholeskySolverE" title="Permalink to this definition">#</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6MatrixE">
+<span id="_CPPv3N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6MatrixE"></span><span id="_CPPv2N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6MatrixE"></span><span id="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::Matrix"></span><span class="target" id="classsofa_1_1component_1_1linearsolver_1_1direct_1_1CUDASparseCholeskySolver_1a7e0408dd1ae414092fa4ab7ec892e73f"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN4sofa9component12linearsolver6direct24CUDASparseCholeskySolverE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::TMatrix"><span class="n"><span class="pre">TMatrix</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Matrix</span></span></span><a class="headerlink" href="#_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6MatrixE" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6VectorE">
+<span id="_CPPv3N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6VectorE"></span><span id="_CPPv2N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6VectorE"></span><span id="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::Vector"></span><span class="target" id="classsofa_1_1component_1_1linearsolver_1_1direct_1_1CUDASparseCholeskySolver_1aeaa4bd227f9ff294d9d44d45a612cbc5"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN4sofa9component12linearsolver6direct24CUDASparseCholeskySolverE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::TVector"><span class="n"><span class="pre">TVector</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Vector</span></span></span><a class="headerlink" href="#_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6VectorE" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver4RealE">
+<span id="_CPPv3N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver4RealE"></span><span id="_CPPv2N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver4RealE"></span><span id="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::Real"></span><span class="target" id="classsofa_1_1component_1_1linearsolver_1_1direct_1_1CUDASparseCholeskySolver_1a478577e3d64452ab522ae1fa32c538e3"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6MatrixE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::Matrix"><span class="n"><span class="pre">Matrix</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Real</span></span></span><a class="headerlink" href="#_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver4RealE" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver7InheritE">
+<span id="_CPPv3N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver7InheritE"></span><span id="_CPPv2N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver7InheritE"></span><span id="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::Inherit"></span><span class="target" id="classsofa_1_1component_1_1linearsolver_1_1direct_1_1CUDASparseCholeskySolver_1ac6ea91e8d230e942d085fef2fda7b947"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">sofa</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">component</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">linearsolver</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">MatrixLinearSolver</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN4sofa9component12linearsolver6direct24CUDASparseCholeskySolverE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::TMatrix"><span class="n"><span class="pre">TMatrix</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN4sofa9component12linearsolver6direct24CUDASparseCholeskySolverE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::TVector"><span class="n"><span class="pre">TVector</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Inherit</span></span></span><a class="headerlink" href="#_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver7InheritE" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver10SOFA_CLASSEF14SOFA_TEMPLATE224CUDASparseCholeskySolver7TMatrix7TVectorEF14SOFA_TEMPLATE2N4sofa9component12linearsolver18MatrixLinearSolverE7TMatrix7TVectorE">
+<span id="_CPPv3N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver10SOFA_CLASSEF14SOFA_TEMPLATE224CUDASparseCholeskySolver7TMatrix7TVectorEF14SOFA_TEMPLATE2N4sofa9component12linearsolver18MatrixLinearSolverE7TMatrix7TVectorE"></span><span id="_CPPv2N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver10SOFA_CLASSEF14SOFA_TEMPLATE224CUDASparseCholeskySolver7TMatrix7TVectorEF14SOFA_TEMPLATE2N4sofa9component12linearsolver18MatrixLinearSolverE7TMatrix7TVectorE"></span><span class="target" id="classsofa_1_1component_1_1linearsolver_1_1direct_1_1CUDASparseCholeskySolver_1a533771934fcb7e5c273242cac7e9ae05"></span><span class="sig-name descname"><span class="n"><span class="pre">SOFA_CLASS</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SOFA_TEMPLATE2</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#_CPPv4I00EN4sofa9component12linearsolver6direct24CUDASparseCholeskySolverE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver"><span class="n"><span class="pre">CUDASparseCholeskySolver</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN4sofa9component12linearsolver6direct24CUDASparseCholeskySolverE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::TMatrix"><span class="n"><span class="pre">TMatrix</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN4sofa9component12linearsolver6direct24CUDASparseCholeskySolverE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::TVector"><span class="n"><span class="pre">TVector</span></span></a><span class="p"><span class="pre">)</span></span>, <span class="n"><span class="pre">SOFA_TEMPLATE2</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">sofa</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">component</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">linearsolver</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">MatrixLinearSolver</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN4sofa9component12linearsolver6direct24CUDASparseCholeskySolverE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::TMatrix"><span class="n"><span class="pre">TMatrix</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN4sofa9component12linearsolver6direct24CUDASparseCholeskySolverE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::TVector"><span class="n"><span class="pre">TVector</span></span></a><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver10SOFA_CLASSEF14SOFA_TEMPLATE224CUDASparseCholeskySolver7TMatrix7TVectorEF14SOFA_TEMPLATE2N4sofa9component12linearsolver18MatrixLinearSolverE7TMatrix7TVectorE" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver5solveER6MatrixR6VectorR6Vector">
+<span id="_CPPv3N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver5solveER6MatrixR6VectorR6Vector"></span><span id="_CPPv2N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver5solveER6MatrixR6VectorR6Vector"></span><span id="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::solve__MatrixR.VectorR.VectorR"></span><span class="target" id="classsofa_1_1component_1_1linearsolver_1_1direct_1_1CUDASparseCholeskySolver_1a1d19bf06445d29c04bf3e700af505868"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">solve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6MatrixE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::Matrix"><span class="n"><span class="pre">Matrix</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">M</span></span>, <a class="reference internal" href="#_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6VectorE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::Vector"><span class="n"><span class="pre">Vector</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span>, <a class="reference internal" href="#_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6VectorE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::Vector"><span class="n"><span class="pre">Vector</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver5solveER6MatrixR6VectorR6Vector" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6invertER6Matrix">
+<span id="_CPPv3N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6invertER6Matrix"></span><span id="_CPPv2N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6invertER6Matrix"></span><span id="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::invert__MatrixR"></span><span class="target" id="classsofa_1_1component_1_1linearsolver_1_1direct_1_1CUDASparseCholeskySolver_1a43f481f65d881cfdaafca4c395cc34f2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">invert</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6MatrixE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::Matrix"><span class="n"><span class="pre">Matrix</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">M</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver6invertER6Matrix" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver10solve_implEiP4RealP4Real">
+<span id="_CPPv3N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver10solve_implEiP4RealP4Real"></span><span id="_CPPv2N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver10solve_implEiP4RealP4Real"></span><span id="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::solve_impl__i.RealP.RealP"></span><span class="target" id="classsofa_1_1component_1_1linearsolver_1_1direct_1_1CUDASparseCholeskySolver_1a8330e0cd4bcd51e836fc61f6c1f1eece"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">solve_impl</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <a class="reference internal" href="#_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver4RealE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::Real"><span class="n"><span class="pre">Real</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">b</span></span>, <a class="reference internal" href="#_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver4RealE" title="sofa::component::linearsolver::direct::CUDASparseCholeskySolver::Real"><span class="n"><span class="pre">Real</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4sofa9component12linearsolver6direct24CUDASparseCholeskySolver10solve_implEiP4RealP4Real" title="Permalink to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="namespace_SofaCUDALinearSolver.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Namespace SofaCUDALinearSolver</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="function_utils_8h_1a68f18130573d44970cc9c1869a606f59.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Function __checkCudaErrors</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By DEFROST Team<br/>
+  
+      &copy; Copyright 2023, DEFROST Team, Inria &amp; Cristal.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

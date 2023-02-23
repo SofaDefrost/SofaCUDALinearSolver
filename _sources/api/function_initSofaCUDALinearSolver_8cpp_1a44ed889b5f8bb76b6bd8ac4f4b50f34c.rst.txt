@@ -1,0 +1,14 @@
+.. _exhale_function_initSofaCUDALinearSolver_8cpp_1a44ed889b5f8bb76b6bd8ac4f4b50f34c:
+
+Function getModuleVersion
+=========================
+
+- Defined in :ref:`file_src_SofaCUDALinearSolver_initSofaCUDALinearSolver.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: getModuleVersion()
+   :project: SofaCUDALinearSolver

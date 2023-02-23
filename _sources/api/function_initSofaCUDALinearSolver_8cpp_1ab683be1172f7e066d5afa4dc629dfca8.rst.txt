@@ -1,0 +1,14 @@
+.. _exhale_function_initSofaCUDALinearSolver_8cpp_1ab683be1172f7e066d5afa4dc629dfca8:
+
+Function initExternalModule
+===========================
+
+- Defined in :ref:`file_src_SofaCUDALinearSolver_initSofaCUDALinearSolver.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: initExternalModule()
+   :project: SofaCUDALinearSolver

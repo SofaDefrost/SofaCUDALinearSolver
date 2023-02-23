@@ -1,0 +1,14 @@
+.. _exhale_variable_namespacesofa_1_1component_1_1linearsolver_1_1direct_1aa94ed5cb6e5cf80c6b969af5ce8b596d:
+
+Template Variable sofa::component::linearsolver::direct::CUDASparseCholeskySolver< CompressedRowSparseMatrix< float >, FullVector< float > >
+============================================================================================================================================
+
+- Defined in :ref:`file_src_SofaCUDALinearSolver_CUDACholeksySparseSolver.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: sofa::component::linearsolver::direct::CUDASparseCholeskySolver< CompressedRowSparseMatrix< float >, FullVector< float > >
+   :project: SofaCUDALinearSolver

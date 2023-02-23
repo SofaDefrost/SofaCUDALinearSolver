@@ -1,0 +1,13 @@
+
+.. _namespace_sofa__linearalgebra:
+
+Namespace sofa::linearalgebra
+=============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+

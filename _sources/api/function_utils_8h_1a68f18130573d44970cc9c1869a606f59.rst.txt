@@ -1,0 +1,14 @@
+.. _exhale_function_utils_8h_1a68f18130573d44970cc9c1869a606f59:
+
+Function __checkCudaErrors
+==========================
+
+- Defined in :ref:`file_src_SofaCUDALinearSolver_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: __checkCudaErrors(cudaError, const char *, const int)
+   :project: SofaCUDALinearSolver

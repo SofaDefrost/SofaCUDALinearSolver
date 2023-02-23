@@ -1,0 +1,14 @@
+.. _exhale_define_utils_8h_1affad5b16e01b3da52fa1a44786b8bedb:
+
+Define checksolver
+==================
+
+- Defined in :ref:`file_src_SofaCUDALinearSolver_utils.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: checksolver
+   :project: SofaCUDALinearSolver

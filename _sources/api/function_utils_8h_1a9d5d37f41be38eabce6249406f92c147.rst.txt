@@ -1,0 +1,14 @@
+.. _exhale_function_utils_8h_1a9d5d37f41be38eabce6249406f92c147:
+
+Function __checksolver
+======================
+
+- Defined in :ref:`file_src_SofaCUDALinearSolver_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: __checksolver(cusolverStatus_t, const char *, const int)
+   :project: SofaCUDALinearSolver

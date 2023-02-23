@@ -1,0 +1,14 @@
+.. _exhale_define_CUDACholeksySparseSolver_8cpp_1a3decdc8b418bb7013cef2546ab2fdd10:
+
+Define SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP
+===============================================
+
+- Defined in :ref:`file_src_SofaCUDALinearSolver_CUDACholeksySparseSolver.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP
+   :project: SofaCUDALinearSolver

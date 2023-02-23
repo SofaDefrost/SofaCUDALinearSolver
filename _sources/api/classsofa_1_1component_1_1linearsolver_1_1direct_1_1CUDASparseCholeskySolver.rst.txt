@@ -1,0 +1,26 @@
+.. _exhale_class_classsofa_1_1component_1_1linearsolver_1_1direct_1_1CUDASparseCholeskySolver:
+
+Template Class CUDASparseCholeskySolver
+=======================================
+
+- Defined in :ref:`file_src_SofaCUDALinearSolver_CUDACholeksySparseSolver.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public sofa::component::linearsolver::MatrixLinearSolver< TMatrix, TVector >``
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sofa::component::linearsolver::direct::CUDASparseCholeskySolver
+   :project: SofaCUDALinearSolver
+   :members:
+   :protected-members:
+   :undoc-members:

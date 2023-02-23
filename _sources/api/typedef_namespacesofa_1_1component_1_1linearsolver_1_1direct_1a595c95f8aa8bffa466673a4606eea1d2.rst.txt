@@ -1,0 +1,14 @@
+.. _exhale_typedef_namespacesofa_1_1component_1_1linearsolver_1_1direct_1a595c95f8aa8bffa466673a4606eea1d2:
+
+Typedef sofa::component::linearsolver::direct::OtherFloatingType
+================================================================
+
+- Defined in :ref:`file_src_SofaCUDALinearSolver_CUDACholeksySparseSolver.cpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: sofa::component::linearsolver::direct::OtherFloatingType
+   :project: SofaCUDALinearSolver

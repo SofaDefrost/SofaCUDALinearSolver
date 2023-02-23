@@ -1,0 +1,14 @@
+.. _exhale_function_namespacesofa_1_1component_1_1linearsolver_1_1direct_1aac02b3f96d71cc4229b9ea1795d661bf:
+
+Function sofa::component::linearsolver::direct::compareMatrixShape
+==================================================================
+
+- Defined in :ref:`file_src_SofaCUDALinearSolver_CUDACholeksySparseSolver.inl`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sofa::component::linearsolver::direct::compareMatrixShape(int, const int *, const int *, int, const int *, const int *)
+   :project: SofaCUDALinearSolver

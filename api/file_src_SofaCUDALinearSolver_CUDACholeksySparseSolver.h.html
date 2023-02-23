@@ -1,0 +1,549 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File CUDACholeksySparseSolver.h &#8212; SofaCUDALinearSolver  documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">SofaCUDALinearSolver  documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="library_root.html">
+   Library API
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_sofa.html">
+     Namespace sofa
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_sofa__component.html">
+     Namespace sofa::component
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_sofa__component__linearsolver.html">
+     Namespace sofa::component::linearsolver
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_sofa__component__linearsolver__direct.html">
+     Namespace sofa::component::linearsolver::direct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_sofa__linearalgebra.html">
+     Namespace sofa::linearalgebra
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_SofaCUDALinearSolver.html">
+     Namespace SofaCUDALinearSolver
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="classsofa_1_1component_1_1linearsolver_1_1direct_1_1CUDASparseCholeskySolver.html">
+     Template Class CUDASparseCholeskySolver
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_utils_8h_1a68f18130573d44970cc9c1869a606f59.html">
+     Function __checkCudaErrors
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_utils_8h_1a9d5d37f41be38eabce6249406f92c147.html">
+     Function __checksolver
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1a925f86586ba8483514c39b8195865172.html">
+     Function getModuleComponentList
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1ae97f7737e707fc56a505aad155cad50f.html">
+     Function getModuleDescription
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1a89120c5d3a2d8abeb8a06bd97244b1bb.html">
+     Function getModuleLicense
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1a46fad1aeab8d4b22de640eb81251b2f9.html">
+     Function getModuleName
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1a44ed889b5f8bb76b6bd8ac4f4b50f34c.html">
+     Function getModuleVersion
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1ab683be1172f7e066d5afa4dc629dfca8.html">
+     Function initExternalModule
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1a86935684c3859891350f7db369490d33.html">
+     Function moduleIsInitialized
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_namespacesofa_1_1component_1_1linearsolver_1_1direct_1aac02b3f96d71cc4229b9ea1795d661bf.html">
+     Function sofa::component::linearsolver::direct::compareMatrixShape
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_namespaceSofaCUDALinearSolver_1acbd2bb8247e3cf7bbfb9f7f9d9f31600.html">
+     Function SofaCUDALinearSolver::cudaInit
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="variable_initSofaCUDALinearSolver_8cpp_1abb52f3d45d9d14cb73d042af4f90a8f7.html">
+     Variable isModuleInitialized
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="variable_namespacesofa_1_1component_1_1linearsolver_1_1direct_1a81ee0e6bd742b122690a7ac0352d234c.html">
+     Template Variable sofa::component::linearsolver::direct::CUDASparseCholeskySolver&lt; CompressedRowSparseMatrix&lt; double &gt;, FullVector&lt; double &gt; &gt;
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="variable_namespacesofa_1_1component_1_1linearsolver_1_1direct_1aa94ed5cb6e5cf80c6b969af5ce8b596d.html">
+     Template Variable sofa::component::linearsolver::direct::CUDASparseCholeskySolver&lt; CompressedRowSparseMatrix&lt; float &gt;, FullVector&lt; float &gt; &gt;
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="variable_namespacesofa_1_1component_1_1linearsolver_1_1direct_1ab118ef68311be2759a9ae2984f30ee47.html">
+     Variable sofa::component::linearsolver::direct::CUDASparseCholeskySolverClass
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="define_utils_8h_1a0dc2509fe91ff83747bb2f336c2c0d44.html">
+     Define checkCudaErrors
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="define_utils_8h_1affad5b16e01b3da52fa1a44786b8bedb.html">
+     Define checksolver
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="define_CUDACholeksySparseSolver_8cpp_1a3decdc8b418bb7013cef2546ab2fdd10.html">
+     Define SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="typedef_namespacesofa_1_1component_1_1linearsolver_1_1direct_1a595c95f8aa8bffa466673a4606eea1d2.html">
+     Typedef sofa::component::linearsolver::direct::OtherFloatingType
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+<a href="https://github.com/SofaDefrost/SofaCUDALinearSolver"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="bottom"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/api/file_src_SofaCUDALinearSolver_CUDACholeksySparseSolver.h.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#definition-src-sofacudalinearsolver-cudacholeksysparsesolver-h">
+   Definition (
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     src/SofaCUDALinearSolver/CUDACholeksySparseSolver.h
+    </span>
+   </code>
+   )
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#includes">
+   Includes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#included-by">
+   Included By
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#namespaces">
+   Namespaces
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#classes">
+   Classes
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>File CUDACholeksySparseSolver.h</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#definition-src-sofacudalinearsolver-cudacholeksysparsesolver-h">
+   Definition (
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     src/SofaCUDALinearSolver/CUDACholeksySparseSolver.h
+    </span>
+   </code>
+   )
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#includes">
+   Includes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#included-by">
+   Included By
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#namespaces">
+   Namespaces
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#classes">
+   Classes
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <div class="section" id="file-cudacholeksysparsesolver-h">
+<span id="file-src-sofacudalinearsolver-cudacholeksysparsesolver-h"></span><h1>File CUDACholeksySparseSolver.h<a class="headerlink" href="#file-cudacholeksysparsesolver-h" title="Permalink to this headline">#</a></h1>
+<p>↰ <a class="reference internal" href="dir_src_SofaCUDALinearSolver.html#dir-src-sofacudalinearsolver"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">src/SofaCUDALinearSolver</span></code>)</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#definition-src-sofacudalinearsolver-cudacholeksysparsesolver-h" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">src/SofaCUDALinearSolver/CUDACholeksySparseSolver.h</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
+<li><p><a class="reference internal" href="#included-by" id="id3">Included By</a></p></li>
+<li><p><a class="reference internal" href="#namespaces" id="id4">Namespaces</a></p></li>
+<li><p><a class="reference internal" href="#classes" id="id5">Classes</a></p></li>
+</ul>
+</div>
+<div class="section" id="definition-src-sofacudalinearsolver-cudacholeksysparsesolver-h">
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">src/SofaCUDALinearSolver/CUDACholeksySparseSolver.h</span></code>)<a class="headerlink" href="#definition-src-sofacudalinearsolver-cudacholeksysparsesolver-h" title="Permalink to this headline">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file_src_SofaCUDALinearSolver_CUDACholeksySparseSolver.h.html">Program Listing for File CUDACholeksySparseSolver.h</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="includes">
+<h2>Includes<a class="headerlink" href="#includes" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SofaCUDALinearSolver/config.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cusolverSp.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cusolverSp_LOWLEVEL_PREVIEW.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sofa/component/linearsolver/iterative/MatrixLinearSolver.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sofa/core/behavior/LinearSolver.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sofa/helper/OptionsGroup.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sofa/simulation/MechanicalVisitor.h</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="included-by">
+<h2>Included By<a class="headerlink" href="#included-by" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="file_src_SofaCUDALinearSolver_CUDACholeksySparseSolver.inl.html#file-src-sofacudalinearsolver-cudacholeksysparsesolver-inl"><span class="std std-ref">File CUDACholeksySparseSolver.inl</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="namespace_sofa.html#namespace-sofa"><span class="std std-ref">Namespace sofa</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_sofa__component.html#namespace-sofa-component"><span class="std std-ref">Namespace sofa::component</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_sofa__component__linearsolver.html#namespace-sofa-component-linearsolver"><span class="std std-ref">Namespace sofa::component::linearsolver</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_sofa__component__linearsolver__direct.html#namespace-sofa-component-linearsolver-direct"><span class="std std-ref">Namespace sofa::component::linearsolver::direct</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="classsofa_1_1component_1_1linearsolver_1_1direct_1_1CUDASparseCholeskySolver.html#exhale-class-classsofa-1-1component-1-1linearsolver-1-1direct-1-1cudasparsecholeskysolver"><span class="std std-ref">Template Class CUDASparseCholeskySolver</span></a></p></li>
+</ul>
+</div>
+</div>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By DEFROST Team<br/>
+  
+      &copy; Copyright 2023, DEFROST Team, Inria &amp; Cristal.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

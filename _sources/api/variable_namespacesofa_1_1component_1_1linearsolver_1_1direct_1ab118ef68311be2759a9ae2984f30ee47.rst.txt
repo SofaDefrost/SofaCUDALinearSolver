@@ -1,0 +1,14 @@
+.. _exhale_variable_namespacesofa_1_1component_1_1linearsolver_1_1direct_1ab118ef68311be2759a9ae2984f30ee47:
+
+Variable sofa::component::linearsolver::direct::CUDASparseCholeskySolverClass
+=============================================================================
+
+- Defined in :ref:`file_src_SofaCUDALinearSolver_CUDACholeksySparseSolver.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: sofa::component::linearsolver::direct::CUDASparseCholeskySolverClass
+   :project: SofaCUDALinearSolver

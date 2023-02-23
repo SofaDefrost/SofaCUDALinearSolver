@@ -1,0 +1,14 @@
+.. _exhale_define_utils_8h_1a0dc2509fe91ff83747bb2f336c2c0d44:
+
+Define checkCudaErrors
+======================
+
+- Defined in :ref:`file_src_SofaCUDALinearSolver_utils.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: checkCudaErrors
+   :project: SofaCUDALinearSolver

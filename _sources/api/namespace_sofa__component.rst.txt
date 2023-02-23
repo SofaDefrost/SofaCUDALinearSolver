@@ -1,0 +1,20 @@
+
+.. _namespace_sofa__component:
+
+Namespace sofa::component
+=========================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sofa__component__linearsolver`

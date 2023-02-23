@@ -1,0 +1,887 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Program Listing for File CUDACholeksySparseSolver.inl &#8212; SofaCUDALinearSolver  documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">SofaCUDALinearSolver  documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="library_root.html">
+   Library API
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_sofa.html">
+     Namespace sofa
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_sofa__component.html">
+     Namespace sofa::component
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_sofa__component__linearsolver.html">
+     Namespace sofa::component::linearsolver
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_sofa__component__linearsolver__direct.html">
+     Namespace sofa::component::linearsolver::direct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_sofa__linearalgebra.html">
+     Namespace sofa::linearalgebra
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="namespace_SofaCUDALinearSolver.html">
+     Namespace SofaCUDALinearSolver
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="classsofa_1_1component_1_1linearsolver_1_1direct_1_1CUDASparseCholeskySolver.html">
+     Template Class CUDASparseCholeskySolver
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_utils_8h_1a68f18130573d44970cc9c1869a606f59.html">
+     Function __checkCudaErrors
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_utils_8h_1a9d5d37f41be38eabce6249406f92c147.html">
+     Function __checksolver
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1a925f86586ba8483514c39b8195865172.html">
+     Function getModuleComponentList
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1ae97f7737e707fc56a505aad155cad50f.html">
+     Function getModuleDescription
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1a89120c5d3a2d8abeb8a06bd97244b1bb.html">
+     Function getModuleLicense
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1a46fad1aeab8d4b22de640eb81251b2f9.html">
+     Function getModuleName
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1a44ed889b5f8bb76b6bd8ac4f4b50f34c.html">
+     Function getModuleVersion
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1ab683be1172f7e066d5afa4dc629dfca8.html">
+     Function initExternalModule
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_initSofaCUDALinearSolver_8cpp_1a86935684c3859891350f7db369490d33.html">
+     Function moduleIsInitialized
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_namespacesofa_1_1component_1_1linearsolver_1_1direct_1aac02b3f96d71cc4229b9ea1795d661bf.html">
+     Function sofa::component::linearsolver::direct::compareMatrixShape
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="function_namespaceSofaCUDALinearSolver_1acbd2bb8247e3cf7bbfb9f7f9d9f31600.html">
+     Function SofaCUDALinearSolver::cudaInit
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="variable_initSofaCUDALinearSolver_8cpp_1abb52f3d45d9d14cb73d042af4f90a8f7.html">
+     Variable isModuleInitialized
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="variable_namespacesofa_1_1component_1_1linearsolver_1_1direct_1a81ee0e6bd742b122690a7ac0352d234c.html">
+     Template Variable sofa::component::linearsolver::direct::CUDASparseCholeskySolver&lt; CompressedRowSparseMatrix&lt; double &gt;, FullVector&lt; double &gt; &gt;
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="variable_namespacesofa_1_1component_1_1linearsolver_1_1direct_1aa94ed5cb6e5cf80c6b969af5ce8b596d.html">
+     Template Variable sofa::component::linearsolver::direct::CUDASparseCholeskySolver&lt; CompressedRowSparseMatrix&lt; float &gt;, FullVector&lt; float &gt; &gt;
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="variable_namespacesofa_1_1component_1_1linearsolver_1_1direct_1ab118ef68311be2759a9ae2984f30ee47.html">
+     Variable sofa::component::linearsolver::direct::CUDASparseCholeskySolverClass
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="define_utils_8h_1a0dc2509fe91ff83747bb2f336c2c0d44.html">
+     Define checkCudaErrors
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="define_utils_8h_1affad5b16e01b3da52fa1a44786b8bedb.html">
+     Define checksolver
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="define_CUDACholeksySparseSolver_8cpp_1a3decdc8b418bb7013cef2546ab2fdd10.html">
+     Define SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="typedef_namespacesofa_1_1component_1_1linearsolver_1_1direct_1a595c95f8aa8bffa466673a4606eea1d2.html">
+     Typedef sofa::component::linearsolver::direct::OtherFloatingType
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+<a href="https://github.com/SofaDefrost/SofaCUDALinearSolver"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="bottom"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/api/program_listing_file_src_SofaCUDALinearSolver_CUDACholeksySparseSolver.inl.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Program Listing for File CUDACholeksySparseSolver.inl</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <div class="section" id="program-listing-for-file-cudacholeksysparsesolver-inl">
+<span id="program-listing-file-src-sofacudalinearsolver-cudacholeksysparsesolver-inl"></span><h1>Program Listing for File CUDACholeksySparseSolver.inl<a class="headerlink" href="#program-listing-for-file-cudacholeksysparsesolver-inl" title="Permalink to this headline">#</a></h1>
+<p>↰ <a class="reference internal" href="file_src_SofaCUDALinearSolver_CUDACholeksySparseSolver.inl.html#file-src-sofacudalinearsolver-cudacholeksysparsesolver-inl"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">src/SofaCUDALinearSolver/CUDACholeksySparseSolver.inl</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/******************************************************************************</span>
+<span class="cm">*                 SOFA, Simulation Open-Framework Architecture                *</span>
+<span class="cm">*                    (c) 2006 INRIA, USTL, UJF, CNRS, MGH                     *</span>
+<span class="cm">*                                                                             *</span>
+<span class="cm">* This program is free software; you can redistribute it and/or modify it     *</span>
+<span class="cm">* under the terms of the GNU Lesser General Public License as published by    *</span>
+<span class="cm">* the Free Software Foundation; either version 2.1 of the License, or (at     *</span>
+<span class="cm">* your option) any later version.                                             *</span>
+<span class="cm">*                                                                             *</span>
+<span class="cm">* This program is distributed in the hope that it will be useful, but WITHOUT *</span>
+<span class="cm">* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       *</span>
+<span class="cm">* FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License *</span>
+<span class="cm">* for more details.                                                           *</span>
+<span class="cm">*                                                                             *</span>
+<span class="cm">* You should have received a copy of the GNU Lesser General Public License    *</span>
+<span class="cm">* along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.        *</span>
+<span class="cm">*******************************************************************************</span>
+<span class="cm">* Authors: The SOFA Team and external contributors (see Authors.txt)          *</span>
+<span class="cm">*                                                                             *</span>
+<span class="cm">* Contact information: contact@sofa-framework.org                             *</span>
+<span class="cm">******************************************************************************/</span>
+<span class="cp">#pragma once</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;SofaCUDALinearSolver/CUDACholeksySparseSolver.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;sofa/helper/ScopedAdvancedTimer.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;SofaCUDALinearSolver/utils.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cusparse.h&gt;</span><span class="cp"></span>
+
+
+<span class="k">namespace</span> <span class="n">sofa</span><span class="o">::</span><span class="n">component</span><span class="o">::</span><span class="n">linearsolver</span><span class="o">::</span><span class="n">direct</span>
+<span class="p">{</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">TMatrix</span> <span class="p">,</span> <span class="k">class</span> <span class="nc">TVector</span><span class="o">&gt;</span>
+<span class="n">CUDASparseCholeskySolver</span><span class="o">&lt;</span><span class="n">TMatrix</span><span class="p">,</span><span class="n">TVector</span><span class="o">&gt;::</span><span class="n">CUDASparseCholeskySolver</span><span class="p">()</span>
+    <span class="o">:</span> <span class="n">Inherit1</span><span class="p">()</span>
+    <span class="p">,</span> <span class="n">d_typePermutation</span><span class="p">(</span><span class="n">initData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">d_typePermutation</span><span class="p">,</span> <span class="s">&quot;permutation&quot;</span><span class="p">,</span> <span class="s">&quot;Type of fill-in reducing permutation&quot;</span><span class="p">))</span>
+    <span class="p">,</span> <span class="n">d_hardware</span><span class="p">(</span><span class="n">initData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">d_hardware</span><span class="p">,</span> <span class="s">&quot;hardware&quot;</span><span class="p">,</span> <span class="s">&quot;On which hardware to solve the linear system: CPU or GPU&quot;</span><span class="p">))</span>
+<span class="p">{</span>
+    <span class="n">sofa</span><span class="o">::</span><span class="n">helper</span><span class="o">::</span><span class="n">OptionsGroup</span> <span class="n">typePermutationOptions</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s">&quot;None&quot;</span><span class="p">,</span><span class="s">&quot;RCM&quot;</span> <span class="p">,</span><span class="s">&quot;AMD&quot;</span><span class="p">,</span> <span class="s">&quot;METIS&quot;</span><span class="p">);</span>
+    <span class="n">typePermutationOptions</span><span class="p">.</span><span class="n">setSelectedItem</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// default None</span>
+    <span class="n">d_typePermutation</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">typePermutationOptions</span><span class="p">);</span>
+
+    <span class="n">sofa</span><span class="o">::</span><span class="n">helper</span><span class="o">::</span><span class="n">OptionsGroup</span> <span class="n">hardwareOptions</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s">&quot;CPU&quot;</span><span class="p">,</span> <span class="s">&quot;GPU&quot;</span><span class="p">);</span>
+    <span class="n">hardwareOptions</span><span class="p">.</span><span class="n">setSelectedItem</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">d_hardware</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">hardwareOptions</span><span class="p">);</span>
+
+    <span class="n">cusolverSpCreate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">handle</span><span class="p">);</span>
+    <span class="n">cusparseCreate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cusparseHandle</span><span class="p">);</span>
+
+    <span class="n">cudaStreamCreate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">stream</span><span class="p">);</span>
+
+    <span class="n">cusolverSpSetStream</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">stream</span><span class="p">);</span>
+    <span class="n">cusparseSetStream</span><span class="p">(</span><span class="n">cusparseHandle</span><span class="p">,</span> <span class="n">stream</span><span class="p">);</span>
+
+    <span class="n">cusparseCreateMatDescr</span><span class="p">(</span><span class="o">&amp;</span><span class="n">descr</span><span class="p">);</span>
+    <span class="n">cusparseSetMatType</span><span class="p">(</span><span class="n">descr</span><span class="p">,</span> <span class="n">CUSPARSE_MATRIX_TYPE_GENERAL</span><span class="p">);</span>
+    <span class="n">cusparseSetMatIndexBase</span><span class="p">(</span><span class="n">descr</span><span class="p">,</span> <span class="n">CUSPARSE_INDEX_BASE_ZERO</span><span class="p">);</span>
+
+    <span class="n">host_RowPtr</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">host_ColsInd</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">host_values</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+
+    <span class="n">device_RowPtr</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">device_ColsInd</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">device_values</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+
+    <span class="n">device_x</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">device_b</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+
+    <span class="n">buffer_cpu</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">buffer_gpu</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">device_info</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">host_info</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+
+    <span class="n">singularity</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="n">size_internal</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">size_work</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">size_perm</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="n">notSameShape</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+    <span class="n">nnz</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">previous_n</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
+    <span class="n">previous_nnz</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">reorder</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">previous_ColsInd</span><span class="p">.</span><span class="n">clear</span><span class="p">()</span> <span class="p">;</span>
+    <span class="n">previous_RowPtr</span><span class="p">.</span><span class="n">clear</span><span class="p">()</span> <span class="p">;</span>
+
+<span class="p">}</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">TMatrix</span> <span class="p">,</span> <span class="k">class</span> <span class="nc">TVector</span><span class="o">&gt;</span>
+<span class="n">CUDASparseCholeskySolver</span><span class="o">&lt;</span><span class="n">TMatrix</span><span class="p">,</span><span class="n">TVector</span><span class="o">&gt;::~</span><span class="n">CUDASparseCholeskySolver</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">previous_RowPtr</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">previous_ColsInd</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+
+    <span class="n">checkCudaErrors</span><span class="p">(</span><span class="n">cudaFree</span><span class="p">(</span><span class="n">device_x</span><span class="p">));</span>
+    <span class="n">checkCudaErrors</span><span class="p">(</span><span class="n">cudaFree</span><span class="p">(</span><span class="n">device_b</span><span class="p">));</span>
+    <span class="n">checkCudaErrors</span><span class="p">(</span><span class="n">cudaFree</span><span class="p">(</span><span class="n">device_RowPtr</span><span class="p">));</span>
+    <span class="n">checkCudaErrors</span><span class="p">(</span><span class="n">cudaFree</span><span class="p">(</span><span class="n">device_ColsInd</span><span class="p">));</span>
+    <span class="n">checkCudaErrors</span><span class="p">(</span><span class="n">cudaFree</span><span class="p">(</span><span class="n">device_values</span><span class="p">));</span>
+
+    <span class="n">cusolverSpDestroy</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
+    <span class="n">cusolverSpDestroyCsrcholInfo</span><span class="p">(</span><span class="n">device_info</span><span class="p">);</span>
+    <span class="n">cusolverSpDestroyCsrcholInfoHost</span><span class="p">(</span><span class="n">host_info</span><span class="p">);</span>
+    <span class="n">cusparseDestroyMatDescr</span><span class="p">(</span><span class="n">descr</span><span class="p">);</span>
+    <span class="n">cudaStreamDestroy</span><span class="p">(</span><span class="n">stream</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">TMatrix</span><span class="p">,</span> <span class="k">class</span> <span class="nc">TVector</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">CUDASparseCholeskySolver</span><span class="o">&lt;</span><span class="n">TMatrix</span><span class="p">,</span> <span class="n">TVector</span><span class="o">&gt;::</span><span class="n">setWorkspace</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">d_hardware</span><span class="p">.</span><span class="n">getValue</span><span class="p">().</span><span class="n">getSelectedId</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">const</span> <span class="kt">int</span><span class="o">*</span> <span class="n">hRow</span> <span class="o">=</span> <span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">host_rowPermuted</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">:</span> <span class="n">host_RowPtr</span><span class="p">;</span>
+        <span class="k">const</span> <span class="kt">int</span><span class="o">*</span> <span class="n">hCol</span> <span class="o">=</span> <span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">host_colPermuted</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">:</span> <span class="n">host_ColsInd</span><span class="p">;</span>
+        <span class="k">const</span> <span class="n">Real</span><span class="o">*</span> <span class="n">hValues</span> <span class="o">=</span> <span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">host_valuePermuted</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">:</span> <span class="n">host_values</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">Real</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">checksolver</span><span class="p">(</span><span class="n">cusolverSpDcsrcholBufferInfoHost</span><span class="p">(</span> <span class="n">handle</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">descr</span><span class="p">,</span> <span class="n">hValues</span><span class="p">,</span> <span class="n">hRow</span><span class="p">,</span> <span class="n">hCol</span><span class="p">,</span>
+                <span class="n">host_info</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size_internal</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size_work</span> <span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">checksolver</span><span class="p">(</span><span class="n">cusolverSpScsrcholBufferInfoHost</span><span class="p">(</span> <span class="n">handle</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">descr</span><span class="p">,</span> <span class="n">device_values</span><span class="p">,</span> <span class="n">hRow</span><span class="p">,</span> <span class="n">hCol</span><span class="p">,</span>
+                <span class="n">host_info</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size_internal</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size_work</span> <span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="k">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">Real</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">checksolver</span><span class="p">(</span><span class="n">cusolverSpDcsrcholBufferInfo</span><span class="p">(</span> <span class="n">handle</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">descr</span><span class="p">,</span> <span class="n">device_values</span><span class="p">,</span> <span class="n">device_RowPtr</span><span class="p">,</span> <span class="n">device_ColsInd</span><span class="p">,</span>
+                <span class="n">device_info</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size_internal</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size_work</span> <span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">checksolver</span><span class="p">(</span><span class="n">cusolverSpScsrcholBufferInfo</span><span class="p">(</span> <span class="n">handle</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">descr</span><span class="p">,</span> <span class="n">device_values</span><span class="p">,</span> <span class="n">device_RowPtr</span><span class="p">,</span> <span class="n">device_ColsInd</span><span class="p">,</span>
+                <span class="n">device_info</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size_internal</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size_work</span> <span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">TMatrix</span><span class="p">,</span> <span class="k">class</span> <span class="nc">TVector</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">CUDASparseCholeskySolver</span><span class="o">&lt;</span><span class="n">TMatrix</span><span class="p">,</span> <span class="n">TVector</span><span class="o">&gt;::</span><span class="n">numericFactorization</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">d_hardware</span><span class="p">.</span><span class="n">getValue</span><span class="p">().</span><span class="n">getSelectedId</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">const</span> <span class="kt">int</span><span class="o">*</span> <span class="n">hRow</span> <span class="o">=</span> <span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">host_rowPermuted</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">:</span> <span class="n">host_RowPtr</span><span class="p">;</span>
+        <span class="k">const</span> <span class="kt">int</span><span class="o">*</span> <span class="n">hCol</span> <span class="o">=</span> <span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">host_colPermuted</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">:</span> <span class="n">host_ColsInd</span><span class="p">;</span>
+        <span class="k">const</span> <span class="n">Real</span><span class="o">*</span> <span class="n">hValues</span> <span class="o">=</span> <span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">host_valuePermuted</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">:</span> <span class="n">host_values</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">Real</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">checksolver</span><span class="p">(</span><span class="n">cusolverSpDcsrcholFactorHost</span><span class="p">(</span> <span class="n">handle</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">descr</span><span class="p">,</span> <span class="n">hValues</span><span class="p">,</span> <span class="n">hRow</span><span class="p">,</span> <span class="n">hCol</span><span class="p">,</span>
+                <span class="n">host_info</span><span class="p">,</span> <span class="n">buffer_gpu</span> <span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">checksolver</span><span class="p">(</span><span class="n">cusolverSpScsrcholFactorHost</span><span class="p">(</span> <span class="n">handle</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">descr</span><span class="p">,</span> <span class="n">hValues</span><span class="p">,</span> <span class="n">hRow</span><span class="p">,</span> <span class="n">hCol</span><span class="p">,</span>
+                <span class="n">host_info</span><span class="p">,</span> <span class="n">buffer_gpu</span> <span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="k">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">Real</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">checksolver</span><span class="p">(</span><span class="n">cusolverSpDcsrcholFactor</span><span class="p">(</span> <span class="n">handle</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">descr</span><span class="p">,</span> <span class="n">device_values</span><span class="p">,</span> <span class="n">device_RowPtr</span><span class="p">,</span> <span class="n">device_ColsInd</span><span class="p">,</span>
+                <span class="n">device_info</span><span class="p">,</span> <span class="n">buffer_gpu</span> <span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">checksolver</span><span class="p">(</span><span class="n">cusolverSpScsrcholFactor</span><span class="p">(</span> <span class="n">handle</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">descr</span><span class="p">,</span> <span class="n">device_values</span><span class="p">,</span> <span class="n">device_RowPtr</span><span class="p">,</span> <span class="n">device_ColsInd</span><span class="p">,</span>
+                <span class="n">device_info</span><span class="p">,</span> <span class="n">buffer_gpu</span> <span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">TMatrix</span><span class="p">,</span> <span class="k">class</span> <span class="nc">TVector</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">CUDASparseCholeskySolver</span><span class="o">&lt;</span><span class="n">TMatrix</span><span class="p">,</span> <span class="n">TVector</span><span class="o">&gt;::</span><span class="n">createCholeskyInfo</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">cusolverSpDestroyCsrcholInfo</span><span class="p">(</span><span class="n">device_info</span><span class="p">);</span>
+    <span class="n">cusolverSpDestroyCsrcholInfoHost</span><span class="p">(</span><span class="n">host_info</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">d_hardware</span><span class="p">.</span><span class="n">getValue</span><span class="p">().</span><span class="n">getSelectedId</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">checksolver</span><span class="p">(</span><span class="n">cusolverSpCreateCsrcholInfoHost</span><span class="p">(</span><span class="o">&amp;</span><span class="n">host_info</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">checksolver</span><span class="p">(</span><span class="n">cusolverSpCreateCsrcholInfo</span><span class="p">(</span><span class="o">&amp;</span><span class="n">device_info</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">TMatrix</span><span class="p">,</span> <span class="k">class</span> <span class="nc">TVector</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">CUDASparseCholeskySolver</span><span class="o">&lt;</span><span class="n">TMatrix</span><span class="p">,</span> <span class="n">TVector</span><span class="o">&gt;::</span><span class="n">symbolicFactorization</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">d_hardware</span><span class="p">.</span><span class="n">getValue</span><span class="p">().</span><span class="n">getSelectedId</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">const</span> <span class="kt">int</span><span class="o">*</span> <span class="n">hRow</span> <span class="o">=</span> <span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">host_rowPermuted</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">:</span> <span class="n">host_RowPtr</span><span class="p">;</span>
+        <span class="k">const</span> <span class="kt">int</span><span class="o">*</span> <span class="n">hCol</span> <span class="o">=</span> <span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">host_colPermuted</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">:</span> <span class="n">host_ColsInd</span><span class="p">;</span>
+        <span class="n">checksolver</span><span class="p">(</span><span class="n">cusolverSpXcsrcholAnalysisHost</span><span class="p">(</span> <span class="n">handle</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">descr</span><span class="p">,</span> <span class="n">hRow</span><span class="p">,</span> <span class="n">hCol</span><span class="p">,</span> <span class="n">host_info</span> <span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">checksolver</span><span class="p">(</span><span class="n">cusolverSpXcsrcholAnalysis</span><span class="p">(</span> <span class="n">handle</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">descr</span><span class="p">,</span> <span class="n">device_RowPtr</span><span class="p">,</span> <span class="n">device_ColsInd</span><span class="p">,</span> <span class="n">device_info</span> <span class="p">));</span>
+        <span class="n">cudaStreamSynchronize</span><span class="p">(</span><span class="n">stream</span><span class="p">);</span><span class="c1">// for the timer</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">TMatrix</span> <span class="p">,</span> <span class="k">class</span> <span class="nc">TVector</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">CUDASparseCholeskySolver</span><span class="o">&lt;</span><span class="n">TMatrix</span><span class="p">,</span><span class="n">TVector</span><span class="o">&gt;::</span> <span class="n">invert</span><span class="p">(</span><span class="n">Matrix</span><span class="o">&amp;</span> <span class="n">M</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">sofa</span><span class="o">::</span><span class="n">helper</span><span class="o">::</span><span class="n">ScopedAdvancedTimer</span> <span class="n">invertTimer</span><span class="p">(</span><span class="s">&quot;invert&quot;</span><span class="p">);</span>
+
+    <span class="p">{</span>
+        <span class="n">sofa</span><span class="o">::</span><span class="n">helper</span><span class="o">::</span><span class="n">ScopedAdvancedTimer</span> <span class="n">copyTimer</span><span class="p">(</span><span class="s">&quot;copyMatrixData&quot;</span><span class="p">);</span>
+        <span class="n">m_filteredMatrix</span><span class="p">.</span><span class="n">copyNonZeros</span><span class="p">(</span><span class="n">M</span><span class="p">);</span>
+        <span class="n">m_filteredMatrix</span><span class="p">.</span><span class="n">compress</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="n">reorder</span> <span class="o">=</span> <span class="n">d_typePermutation</span><span class="p">.</span><span class="n">getValue</span><span class="p">().</span><span class="n">getSelectedId</span><span class="p">()</span> <span class="p">;</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">m_filteredMatrix</span><span class="p">.</span><span class="n">rowSize</span><span class="p">();</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="n">m_filteredMatrix</span><span class="p">.</span><span class="n">colSize</span><span class="p">();</span>
+    <span class="n">nnz</span> <span class="o">=</span> <span class="n">m_filteredMatrix</span><span class="p">.</span><span class="n">getColsValue</span><span class="p">().</span><span class="n">size</span><span class="p">();</span> <span class="c1">// number of non zero coefficients</span>
+
+    <span class="n">host_RowPtr</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span> <span class="n">m_filteredMatrix</span><span class="p">.</span><span class="n">getRowBegin</span><span class="p">().</span><span class="n">data</span><span class="p">();</span>
+    <span class="n">host_ColsInd</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span> <span class="n">m_filteredMatrix</span><span class="p">.</span><span class="n">getColsIndex</span><span class="p">().</span><span class="n">data</span><span class="p">();</span>
+    <span class="n">host_values</span> <span class="o">=</span> <span class="p">(</span><span class="n">Real</span><span class="o">*</span><span class="p">)</span> <span class="n">m_filteredMatrix</span><span class="p">.</span><span class="n">getColsValue</span><span class="p">().</span><span class="n">data</span><span class="p">();</span>
+
+    <span class="p">{</span>
+        <span class="n">sofa</span><span class="o">::</span><span class="n">helper</span><span class="o">::</span><span class="n">ScopedAdvancedTimer</span> <span class="n">compareMatrixShapeTimer</span><span class="p">(</span><span class="s">&quot;compareMatrixShape&quot;</span><span class="p">);</span>
+        <span class="n">notSameShape</span> <span class="o">=</span> <span class="n">compareMatrixShape</span><span class="p">(</span><span class="n">rows</span> <span class="p">,</span> <span class="n">host_ColsInd</span><span class="p">,</span> <span class="n">host_RowPtr</span><span class="p">,</span> <span class="n">previous_RowPtr</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="n">previous_ColsInd</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">previous_RowPtr</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// allocate memory</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">previous_n</span> <span class="o">&lt;</span> <span class="n">rows</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">host_rowPermuted</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">rows</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">d_hardware</span><span class="p">.</span><span class="n">getValue</span><span class="p">().</span><span class="n">getSelectedId</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">checkCudaErrors</span><span class="p">(</span><span class="n">cudaMalloc</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">device_RowPtr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="p">(</span> <span class="n">rows</span> <span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="p">));</span>
+
+            <span class="n">checkCudaErrors</span><span class="p">(</span><span class="n">cudaMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">device_x</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Real</span><span class="p">)</span><span class="o">*</span><span class="n">cols</span><span class="p">));</span>
+            <span class="n">checkCudaErrors</span><span class="p">(</span><span class="n">cudaMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">device_b</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Real</span><span class="p">)</span><span class="o">*</span><span class="n">cols</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">previous_nnz</span> <span class="o">&lt;</span> <span class="n">nnz</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">d_hardware</span><span class="p">.</span><span class="n">getValue</span><span class="p">().</span><span class="n">getSelectedId</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">device_ColsInd</span><span class="p">)</span> <span class="n">cudaFree</span><span class="p">(</span><span class="n">device_ColsInd</span><span class="p">);</span>
+            <span class="n">checkCudaErrors</span><span class="p">(</span><span class="n">cudaMalloc</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">device_ColsInd</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="n">nnz</span> <span class="p">));</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">device_values</span><span class="p">)</span> <span class="n">cudaFree</span><span class="p">(</span><span class="n">device_values</span><span class="p">);</span>
+            <span class="n">checkCudaErrors</span><span class="p">(</span><span class="n">cudaMalloc</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">device_values</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Real</span><span class="p">)</span><span class="o">*</span><span class="n">nnz</span> <span class="p">));</span>
+        <span class="p">}</span>
+        <span class="n">host_colPermuted</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">nnz</span><span class="p">);</span>
+        <span class="n">host_valuePermuted</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">nnz</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// A = PAQ</span>
+    <span class="c1">// compute fill reducing permutation</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">notSameShape</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">sofa</span><span class="o">::</span><span class="n">helper</span><span class="o">::</span><span class="n">ScopedAdvancedTimer</span> <span class="n">permutationsTimer</span><span class="p">(</span><span class="s">&quot;Permutations&quot;</span><span class="p">);</span>
+
+        <span class="n">host_perm</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">rows</span><span class="p">);</span>
+
+        <span class="k">switch</span><span class="p">(</span> <span class="n">reorder</span> <span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">default</span><span class="o">:</span>
+            <span class="k">case</span> <span class="mi">0</span><span class="o">:</span><span class="c1">// None, this case should not be visited</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="k">case</span> <span class="mi">1</span><span class="o">:</span><span class="c1">//RCM, Symmetric Reverse Cuthill-McKee permutation</span>
+                <span class="n">checksolver</span><span class="p">(</span> <span class="n">cusolverSpXcsrsymrcmHost</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">descr</span><span class="p">,</span> <span class="n">host_RowPtr</span><span class="p">,</span> <span class="n">host_ColsInd</span><span class="p">,</span> <span class="n">host_perm</span><span class="p">.</span><span class="n">data</span><span class="p">())</span> <span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="k">case</span> <span class="mi">2</span><span class="o">:</span><span class="c1">//AMD, Symmetric Approximate Minimum Degree Algorithm based on Quotient Graph</span>
+                <span class="n">checksolver</span><span class="p">(</span> <span class="n">cusolverSpXcsrsymamdHost</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">descr</span><span class="p">,</span> <span class="n">host_RowPtr</span><span class="p">,</span> <span class="n">host_ColsInd</span><span class="p">,</span> <span class="n">host_perm</span><span class="p">.</span><span class="n">data</span><span class="p">())</span> <span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="k">case</span> <span class="mi">3</span><span class="o">:</span><span class="c1">//METIS, nested dissection</span>
+                <span class="n">checksolver</span><span class="p">(</span> <span class="n">cusolverSpXcsrmetisndHost</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">descr</span><span class="p">,</span> <span class="n">host_RowPtr</span><span class="p">,</span> <span class="n">host_ColsInd</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">host_perm</span><span class="p">.</span><span class="n">data</span><span class="p">())</span> <span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">checksolver</span><span class="p">(</span> <span class="n">cusolverSpXcsrperm_bufferSizeHost</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">descr</span><span class="p">,</span> <span class="n">host_RowPtr</span><span class="p">,</span> <span class="n">host_ColsInd</span>
+                                                    <span class="p">,</span> <span class="n">host_perm</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">host_perm</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">size_perm</span><span class="p">)</span> <span class="p">);</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">buffer_cpu</span><span class="p">)</span> <span class="n">free</span><span class="p">(</span><span class="n">buffer_cpu</span><span class="p">);</span>
+        <span class="n">buffer_cpu</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="n">size_perm</span><span class="p">)</span> <span class="p">;</span>
+
+        <span class="n">host_map</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">nnz</span><span class="p">);</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">iota</span><span class="p">(</span><span class="n">host_map</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">host_map</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+
+        <span class="c1">//apply the permutation</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">rows</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">host_rowPermuted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">host_RowPtr</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">nnz</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">host_colPermuted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">host_ColsInd</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">checksolver</span><span class="p">(</span> <span class="n">cusolverSpXcsrpermHost</span><span class="p">(</span> <span class="n">handle</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">nnz</span><span class="p">,</span> <span class="n">descr</span><span class="p">,</span> <span class="n">host_rowPermuted</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">host_colPermuted</span><span class="p">.</span><span class="n">data</span><span class="p">()</span>
+                                        <span class="p">,</span> <span class="n">host_perm</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">host_perm</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">host_map</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">buffer_cpu</span> <span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="c1">// send data to the device</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">notSameShape</span> <span class="o">&amp;&amp;</span> <span class="n">d_hardware</span><span class="p">.</span><span class="n">getValue</span><span class="p">().</span><span class="n">getSelectedId</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">const</span> <span class="kt">int</span><span class="o">*</span> <span class="n">host_rowPtrToCopy</span> <span class="o">=</span> <span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">host_rowPermuted</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">:</span> <span class="n">host_RowPtr</span><span class="p">;</span>
+        <span class="k">const</span> <span class="kt">int</span><span class="o">*</span> <span class="n">host_colPtrToCopy</span> <span class="o">=</span> <span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">host_colPermuted</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">:</span> <span class="n">host_ColsInd</span><span class="p">;</span>
+
+        <span class="n">checkCudaErrors</span><span class="p">(</span> <span class="n">cudaMemcpyAsync</span><span class="p">(</span> <span class="n">device_RowPtr</span><span class="p">,</span> <span class="n">host_rowPtrToCopy</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">rows</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">cudaMemcpyHostToDevice</span><span class="p">,</span> <span class="n">stream</span><span class="p">)</span> <span class="p">);</span>
+        <span class="n">checkCudaErrors</span><span class="p">(</span> <span class="n">cudaMemcpyAsync</span><span class="p">(</span> <span class="n">device_ColsInd</span><span class="p">,</span> <span class="n">host_colPtrToCopy</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="n">nnz</span><span class="p">,</span> <span class="n">cudaMemcpyHostToDevice</span><span class="p">,</span> <span class="n">stream</span> <span class="p">)</span> <span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">//store the shape of the matrix</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">notSameShape</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">previous_nnz</span> <span class="o">=</span> <span class="n">nnz</span> <span class="p">;</span>
+        <span class="n">previous_RowPtr</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span> <span class="n">rows</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">);</span>
+        <span class="n">previous_ColsInd</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span> <span class="n">nnz</span> <span class="p">);</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">nnz</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">previous_ColsInd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">host_ColsInd</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">rows</span> <span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">previous_RowPtr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">host_RowPtr</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span><span class="p">(</span> <span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">sofa</span><span class="o">::</span><span class="n">helper</span><span class="o">::</span><span class="n">ScopedAdvancedTimer</span> <span class="n">reorderValuesTimer</span><span class="p">(</span><span class="s">&quot;ReorderValues&quot;</span><span class="p">);</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">nnz</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">host_valuePermuted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">host_values</span><span class="p">[</span> <span class="n">host_map</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">d_hardware</span><span class="p">.</span><span class="n">getValue</span><span class="p">().</span><span class="n">getSelectedId</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">const</span> <span class="n">Real</span><span class="o">*</span> <span class="n">hostValuesToCopy</span> <span class="o">=</span> <span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">host_valuePermuted</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">:</span> <span class="n">host_values</span><span class="p">;</span>
+        <span class="n">checkCudaErrors</span><span class="p">(</span> <span class="n">cudaMemcpyAsync</span><span class="p">(</span> <span class="n">device_values</span><span class="p">,</span> <span class="n">hostValuesToCopy</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Real</span><span class="p">)</span><span class="o">*</span><span class="n">nnz</span><span class="p">,</span> <span class="n">cudaMemcpyHostToDevice</span><span class="p">,</span> <span class="n">stream</span> <span class="p">)</span> <span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// factorize on device LL^t = PAP^t</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">notSameShape</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">createCholeskyInfo</span><span class="p">();</span>
+        <span class="p">{</span>
+            <span class="n">sofa</span><span class="o">::</span><span class="n">helper</span><span class="o">::</span><span class="n">ScopedAdvancedTimer</span> <span class="n">symbolicTimer</span><span class="p">(</span><span class="s">&quot;Symbolic factorization&quot;</span><span class="p">);</span>
+            <span class="n">symbolicFactorization</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="n">setWorkspace</span><span class="p">();</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">buffer_gpu</span><span class="p">)</span> <span class="n">cudaFree</span><span class="p">(</span><span class="n">buffer_gpu</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">d_hardware</span><span class="p">.</span><span class="n">getValue</span><span class="p">().</span><span class="n">getSelectedId</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">checkCudaErrors</span><span class="p">(</span><span class="n">cudaMallocHost</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer_gpu</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="n">size_work</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">checkCudaErrors</span><span class="p">(</span><span class="n">cudaMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer_gpu</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="n">size_work</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="p">{</span>
+        <span class="n">sofa</span><span class="o">::</span><span class="n">helper</span><span class="o">::</span><span class="n">ScopedAdvancedTimer</span> <span class="n">numericTimer</span><span class="p">(</span><span class="s">&quot;Numeric factorization&quot;</span><span class="p">);</span>
+        <span class="n">numericFactorization</span><span class="p">();</span>
+        <span class="n">cudaStreamSynchronize</span><span class="p">(</span><span class="n">stream</span><span class="p">);</span><span class="c1">// for the timer</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">TMatrix</span><span class="p">,</span> <span class="k">class</span> <span class="nc">TVector</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">CUDASparseCholeskySolver</span><span class="o">&lt;</span><span class="n">TMatrix</span><span class="p">,</span> <span class="n">TVector</span><span class="o">&gt;::</span><span class="n">solve_impl</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">Real</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="n">Real</span><span class="o">*</span> <span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">d_hardware</span><span class="p">.</span><span class="n">getValue</span><span class="p">().</span><span class="n">getSelectedId</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Real</span><span class="o">*</span> <span class="n">host_b</span> <span class="o">=</span> <span class="p">(</span><span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">host_bPermuted</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">:</span> <span class="n">b</span><span class="p">;</span>
+        <span class="n">Real</span><span class="o">*</span> <span class="n">host_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">host_xPermuted</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">:</span> <span class="n">x</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">Real</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">checksolver</span><span class="p">(</span><span class="n">cusolverSpDcsrcholSolveHost</span><span class="p">(</span> <span class="n">handle</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">host_b</span><span class="p">,</span> <span class="n">host_x</span><span class="p">,</span> <span class="n">host_info</span><span class="p">,</span> <span class="n">buffer_gpu</span> <span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">checksolver</span><span class="p">(</span><span class="n">cusolverSpScsrcholSolveHost</span><span class="p">(</span> <span class="n">handle</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">host_b</span><span class="p">,</span> <span class="n">host_x</span><span class="p">,</span> <span class="n">host_info</span><span class="p">,</span> <span class="n">buffer_gpu</span> <span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="k">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">Real</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">checksolver</span><span class="p">(</span><span class="n">cusolverSpDcsrcholSolve</span><span class="p">(</span> <span class="n">handle</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">device_b</span><span class="p">,</span> <span class="n">device_x</span><span class="p">,</span> <span class="n">device_info</span><span class="p">,</span> <span class="n">buffer_gpu</span> <span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">checksolver</span><span class="p">(</span><span class="n">cusolverSpScsrcholSolve</span><span class="p">(</span> <span class="n">handle</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">device_b</span><span class="p">,</span> <span class="n">device_x</span><span class="p">,</span> <span class="n">device_info</span><span class="p">,</span> <span class="n">buffer_gpu</span> <span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">TMatrix</span> <span class="p">,</span> <span class="k">class</span> <span class="nc">TVector</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">CUDASparseCholeskySolver</span><span class="o">&lt;</span><span class="n">TMatrix</span><span class="p">,</span><span class="n">TVector</span><span class="o">&gt;::</span><span class="n">solve</span><span class="p">(</span><span class="n">Matrix</span><span class="o">&amp;</span> <span class="n">M</span><span class="p">,</span> <span class="n">Vector</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">,</span> <span class="n">Vector</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">sofa</span><span class="o">::</span><span class="n">helper</span><span class="o">::</span><span class="n">ScopedAdvancedTimer</span> <span class="n">solveTimer</span><span class="p">(</span><span class="s">&quot;solve&quot;</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">M</span><span class="p">.</span><span class="n">colSize</span><span class="p">()</span>  <span class="p">;</span> <span class="c1">// avoidable, used to prevent compilation warning</span>
+
+    <span class="k">if</span><span class="p">(</span> <span class="n">previous_n</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">reorder</span> <span class="o">!=</span><span class="mi">0</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">host_bPermuted</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="n">host_xPermuted</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span><span class="p">(</span> <span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">sofa</span><span class="o">::</span><span class="n">helper</span><span class="o">::</span><span class="n">ScopedAdvancedTimer</span> <span class="n">reorderRHSTimer</span><span class="p">(</span><span class="s">&quot;reorderRHS&quot;</span><span class="p">);</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">host_bPermuted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span> <span class="n">host_perm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">Real</span><span class="o">*</span> <span class="n">host_b</span> <span class="o">=</span> <span class="p">(</span><span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">host_bPermuted</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">:</span> <span class="n">b</span><span class="p">.</span><span class="n">ptr</span><span class="p">();</span>
+    <span class="n">Real</span><span class="o">*</span> <span class="n">host_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">host_xPermuted</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">:</span> <span class="n">x</span><span class="p">.</span><span class="n">ptr</span><span class="p">();</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">d_hardware</span><span class="p">.</span><span class="n">getValue</span><span class="p">().</span><span class="n">getSelectedId</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">sofa</span><span class="o">::</span><span class="n">helper</span><span class="o">::</span><span class="n">ScopedAdvancedTimer</span> <span class="n">copyRHSToDeviceTimer</span><span class="p">(</span><span class="s">&quot;copyRHSToDevice&quot;</span><span class="p">);</span>
+        <span class="n">checkCudaErrors</span><span class="p">(</span><span class="n">cudaMemcpyAsync</span><span class="p">(</span> <span class="n">device_b</span><span class="p">,</span> <span class="n">host_b</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Real</span><span class="p">)</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">cudaMemcpyHostToDevice</span><span class="p">,</span><span class="n">stream</span><span class="p">));</span>
+        <span class="n">checkCudaErrors</span><span class="p">(</span><span class="n">cudaStreamSynchronize</span><span class="p">(</span><span class="n">stream</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="p">{</span>
+        <span class="c1">// LL^t y = Pb</span>
+        <span class="n">sofa</span><span class="o">::</span><span class="n">helper</span><span class="o">::</span><span class="n">ScopedAdvancedTimer</span> <span class="n">solveTimer</span><span class="p">(</span><span class="s">&quot;Solve&quot;</span><span class="p">);</span>
+
+        <span class="n">solve_impl</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">.</span><span class="n">ptr</span><span class="p">(),</span> <span class="n">b</span><span class="p">.</span><span class="n">ptr</span><span class="p">());</span>
+        <span class="n">checkCudaErrors</span><span class="p">(</span><span class="n">cudaStreamSynchronize</span><span class="p">(</span><span class="n">stream</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">d_hardware</span><span class="p">.</span><span class="n">getValue</span><span class="p">().</span><span class="n">getSelectedId</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">sofa</span><span class="o">::</span><span class="n">helper</span><span class="o">::</span><span class="n">ScopedAdvancedTimer</span> <span class="n">copySolutionToHostTimer</span><span class="p">(</span><span class="s">&quot;copySolutionToHost&quot;</span><span class="p">);</span>
+
+        <span class="n">checkCudaErrors</span><span class="p">(</span><span class="n">cudaMemcpyAsync</span><span class="p">(</span> <span class="n">host_x</span><span class="p">,</span> <span class="n">device_x</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Real</span><span class="p">)</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">cudaMemcpyDeviceToHost</span><span class="p">,</span><span class="n">stream</span><span class="p">));</span>
+        <span class="n">cudaStreamSynchronize</span><span class="p">(</span><span class="n">stream</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span><span class="p">(</span> <span class="n">reorder</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">sofa</span><span class="o">::</span><span class="n">helper</span><span class="o">::</span><span class="n">ScopedAdvancedTimer</span> <span class="n">reorderSolutionTimer</span><span class="p">(</span><span class="s">&quot;reorderSolution&quot;</span><span class="p">);</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">host_perm</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">host_xPermuted</span><span class="p">[</span> <span class="n">i</span> <span class="p">];</span> <span class="c1">// Px = y</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+
+    <span class="n">previous_n</span> <span class="o">=</span> <span class="n">n</span> <span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kr">inline</span> <span class="kt">bool</span> <span class="n">compareMatrixShape</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">s_M</span><span class="p">,</span><span class="k">const</span> <span class="kt">int</span> <span class="o">*</span> <span class="n">M_colind</span><span class="p">,</span><span class="k">const</span> <span class="kt">int</span> <span class="o">*</span> <span class="n">M_rowptr</span><span class="p">,</span><span class="k">const</span> <span class="kt">int</span> <span class="n">s_P</span><span class="p">,</span><span class="k">const</span> <span class="kt">int</span> <span class="o">*</span> <span class="n">P_colind</span><span class="p">,</span><span class="k">const</span> <span class="kt">int</span> <span class="o">*</span> <span class="n">P_rowptr</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s_M</span> <span class="o">!=</span> <span class="n">s_P</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">M_rowptr</span><span class="p">[</span><span class="n">s_M</span><span class="p">]</span> <span class="o">!=</span> <span class="n">P_rowptr</span><span class="p">[</span><span class="n">s_M</span><span class="p">]</span> <span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">s_P</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">M_rowptr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">!=</span><span class="n">P_rowptr</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">M_rowptr</span><span class="p">[</span><span class="n">s_M</span><span class="p">];</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">M_colind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">!=</span><span class="n">P_colind</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+
+<span class="p">}</span><span class="c1">// namespace sofa::component::linearsolver::direct</span>
+</pre></div>
+</div>
+</div>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By DEFROST Team<br/>
+  
+      &copy; Copyright 2023, DEFROST Team, Inria &amp; Cristal.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
