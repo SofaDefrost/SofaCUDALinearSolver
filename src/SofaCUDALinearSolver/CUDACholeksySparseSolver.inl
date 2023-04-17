@@ -36,11 +36,11 @@ CUDASparseCholeskySolver<TMatrix,TVector>::CUDASparseCholeskySolver()
     , d_typePermutation(initData(&d_typePermutation, "permutation", "Type of fill-in reducing permutation"))
     , d_hardware(initData(&d_hardware, "hardware", "On which hardware to solve the linear system: CPU or GPU"))
 {
-    sofa::helper::OptionsGroup typePermutationOptions(4,"None","RCM" ,"AMD", "METIS");
+    sofa::helper::OptionsGroup typePermutationOptions{"None","RCM" ,"AMD", "METIS"};
     typePermutationOptions.setSelectedItem(0); // default None
     d_typePermutation.setValue(typePermutationOptions);
 
-    sofa::helper::OptionsGroup hardwareOptions(2,"CPU", "GPU");
+    sofa::helper::OptionsGroup hardwareOptions{"CPU", "GPU"};
     hardwareOptions.setSelectedItem(1);
     d_hardware.setValue(hardwareOptions);
 
