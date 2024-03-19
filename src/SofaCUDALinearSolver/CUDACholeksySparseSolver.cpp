@@ -22,6 +22,7 @@
 #define SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP
 #include <SofaCUDALinearSolver/CUDACholeksySparseSolver.inl>
 #include <sofa/component/linearsolver/iterative/MatrixLinearSolver.inl>
+#include <sofa/component/linearsystem/MatrixProjectionMethod.inl>
 #include <sofa/core/ObjectFactory.h>
 
 namespace sofa::component::linearsolver::direct
