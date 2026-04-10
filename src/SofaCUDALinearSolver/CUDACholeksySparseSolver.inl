@@ -275,7 +275,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
         switch( reorder )
         {
             default:
-            case 0:// None, this case should not be visited 
+            case 0:// None, this case should not be visited
                 break;
 
             case 1://RCM, Symmetric Reverse Cuthill-McKee permutation
@@ -340,8 +340,8 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
         const Real* hostValuesToCopy = reorder != 0 ? host_valuePermuted.data() : host_values;
         checkCudaErrors( cudaMemcpyAsync( device_values, hostValuesToCopy, sizeof(Real)*nnz, cudaMemcpyHostToDevice, stream ) );
     }
-    
-    // factorize on device LL^t = PAP^t 
+
+    // factorize on device LL^t = PAP^t
     if(notSameShape)
     {
         createCholeskyInfo();
@@ -362,7 +362,7 @@ void CUDASparseCholeskySolver<TMatrix,TVector>:: invert(Matrix& M)
             checkCudaErrors(cudaMalloc(&buffer_gpu, sizeof(char)*size_work));
         }
     }
-    
+
     {
         sofa::helper::ScopedAdvancedTimer numericTimer("Numeric factorization");
         numericFactorization();
@@ -462,9 +462,9 @@ void CUDASparseCholeskySolver<TMatrix,TVector>::solve(Matrix& M, Vector& x, Vect
 inline bool compareMatrixShape(const int s_M,const int * M_colind,const int * M_rowptr,const int s_P,const int * P_colind,const int * P_rowptr)
 {
     if (s_M != s_P) return true;
-    if (M_rowptr[s_M] != P_rowptr[s_M] ) return true; 
+    if (M_rowptr[s_M] != P_rowptr[s_M] ) return true;
     for (int i=0;i<s_P;i++) {
-        if (M_rowptr[i]!=P_rowptr[i]) return true; 
+        if (M_rowptr[i]!=P_rowptr[i]) return true;
     }
     for (int i=0;i<M_rowptr[s_M];i++) {
         if (M_colind[i]!=P_colind[i]) return true;

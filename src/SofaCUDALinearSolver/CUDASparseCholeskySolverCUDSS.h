@@ -23,22 +23,28 @@
 
 #include <SofaCUDALinearSolver/config.h>
 
+#include <sofa/linearalgebra/CompressedRowSparseMatrix.h>
 #include <sofa/core/behavior/LinearSolver.h>
 #include <sofa/component/linearsolver/iterative/MatrixLinearSolver.h>
 #include <sofa/simulation/MechanicalVisitor.h>
 #include <sofa/helper/OptionsGroup.h>
+
+// cuDSS for GPU path (modern high-performance sparse direct solver)
+#include <cudss.h>
+
+// cusolverSp for CPU path (host functions)
 #include <cusolverSp.h>
 #include <cusolverSp_LOWLEVEL_PREVIEW.h>
 
 namespace sofa::component::linearsolver::direct
 {
 
-// Direct linear solver based on Sparse Cholesky factorization, implemented with the cuSOLVER library
+// Direct linear solver based on Sparse Cholesky factorization, implemented with the cuDSS library (GPU) or cuSOLVER (CPU)
 template<class TMatrix, class TVector>
-class CUDASparseCholeskySolver : public sofa::component::linearsolver::MatrixLinearSolver<TMatrix,TVector>
+class CUDASparseCholeskySolverCUDSS : public sofa::component::linearsolver::MatrixLinearSolver<TMatrix,TVector>
 {
 public:
-    SOFA_CLASS(SOFA_TEMPLATE2(CUDASparseCholeskySolver,TMatrix,TVector),SOFA_TEMPLATE2(sofa::component::linearsolver::MatrixLinearSolver,TMatrix,TVector));
+    SOFA_CLASS(SOFA_TEMPLATE2(CUDASparseCholeskySolverCUDSS,TMatrix,TVector),SOFA_TEMPLATE2(sofa::component::linearsolver::MatrixLinearSolver,TMatrix,TVector));
 
     typedef TMatrix Matrix;
     typedef TVector Vector;
@@ -47,85 +53,97 @@ public:
 
     void solve (Matrix& M, Vector& x, Vector& b) override;
     void invert(Matrix& M) override;
-    void solve_impl(int n, Real* b, Real* x);
 
 private:
 
     Data<sofa::helper::OptionsGroup> d_typePermutation;
     Data<sofa::helper::OptionsGroup> d_hardware;
 
-    int rows;///< number of rows
-    int cols;///< number of columns
-    int nnz;///< number of non zero elements
+    int rows;   ///< number of rows
+    int cols;   ///< number of columns
+    int nnz;    ///< number of non zero elements
 
-    int singularity;
-
-    // csr format
+    // Host pointers to matrix data (points into m_filteredMatrix)
     int* host_RowPtr;
     int* host_ColsInd;
     Real* host_values;
 
-    // CRS format of the permuted matrix
-    sofa::type::vector<int> host_rowPermuted;
-    sofa::type::vector<int> host_colPermuted;
-    sofa::type::vector<Real> host_valuePermuted;
-
+    // Device memory for matrix (CSR format)
     int* device_RowPtr;
     int* device_ColsInd;
     Real* device_values;
 
-    sofa::type::vector<int> host_perm;
-    sofa::type::vector<int> host_map;
-
-    sofa::type::vector<Real> host_bPermuted;
-    sofa::type::vector<Real> host_xPermuted;
-
-    cusolverSpHandle_t handle;
-    cudaStream_t stream;
-    cusparseHandle_t cusparseHandle;
-    cusparseMatDescr_t descr;
-
-    csrcholInfo_t device_info ;
-    csrcholInfoHost_t host_info;
-
-    size_t size_internal;
-    size_t size_work;
-    size_t size_perm;
-
+    // Device memory for solution and RHS vectors
     Real* device_x;
     Real* device_b;
 
-    void* buffer_gpu;
+    // CUDA stream
+    cudaStream_t stream;
+
+    // ============ cuDSS (GPU path) ============
+    cudssHandle_t cudssHandle;
+    cudssConfig_t cudssConfig;
+    cudssData_t cudssData;
+    cudssMatrix_t cudssMatrixA;
+    cudssMatrix_t cudssMatrixX;
+    cudssMatrix_t cudssMatrixB;
+    bool cudssInitialized;
+
+    // ============ cusolverSp (CPU path) ============
+    cusolverSpHandle_t cusolverHandle;
+    cusparseMatDescr_t cusparseDescr;
+    csrcholInfoHost_t host_info;
     void* buffer_cpu;
+    size_t size_internal_cpu;
+    size_t size_work_cpu;
 
+    // CPU path permutation data
+    int reorder;
+    sofa::type::vector<int> host_perm;
+    sofa::type::vector<int> host_map;
+    sofa::type::vector<int> host_rowPermuted;
+    sofa::type::vector<int> host_colPermuted;
+    sofa::type::vector<Real> host_valuePermuted;
+    sofa::type::vector<Real> host_bPermuted;
+    sofa::type::vector<Real> host_xPermuted;
+    size_t size_perm;
+    void* buffer_perm;
+
+    // ============ Common state ============
     bool notSameShape;
-
     int previous_n;
     int previous_nnz;
-
-    int reorder;
 
     sofa::type::vector<int> previous_ColsInd;
     sofa::type::vector<int> previous_RowPtr;
 
-    CUDASparseCholeskySolver();
-    ~CUDASparseCholeskySolver() override;
-    void setWorkspace();
-    void numericFactorization();
-    void createCholeskyInfo();
-    void symbolicFactorization();
+    CUDASparseCholeskySolverCUDSS();
+    ~CUDASparseCholeskySolverCUDSS() override;
+
+    // GPU path methods (cuDSS)
+    void initCuDSS();
+    void cleanupCuDSS();
+    void invertGPU();
+    void solveGPU(int n, Real* b_host, Real* x_host);
+
+    // CPU path methods (cusolverSp)
+    void initCuSolverHost();
+    void cleanupCuSolverHost();
+    void invertCPU();
+    void solveCPU(int n, Real* b_host, Real* x_host);
 
     sofa::linearalgebra::CompressedRowSparseMatrix<Real> m_filteredMatrix;
 
 };
+
 // compare the shape of 2 matrices given in csr format, return true if the matrices don't have the same shape
 bool compareMatrixShape(int, const int *,const int *, int,const int *,const int *) ;
 
-#if !defined(SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVER_CPP)
-    extern template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<float>,FullVector<float> > ;
-    extern template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, float> >,FullVector<float> > ;
-    extern template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<double>,FullVector<double> > ;
-    extern template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolver< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, double> >,FullVector<double> > ;
+#if !defined(SOFA_PLUGIN_CUDASPARSECHOLESKYSOLVERCUDSS_CPP)
+    extern template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolverCUDSS< CompressedRowSparseMatrix<float>,FullVector<float> > ;
+    extern template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolverCUDSS< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, float> >,FullVector<float> > ;
+    extern template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolverCUDSS< CompressedRowSparseMatrix<double>,FullVector<double> > ;
+    extern template class SOFACUDALINEARSOLVER_API CUDASparseCholeskySolverCUDSS< CompressedRowSparseMatrix<sofa::type::Mat<3, 3, double> >,FullVector<double> > ;
 #endif
 
 } // namespace sofa::component::linearsolver::direct

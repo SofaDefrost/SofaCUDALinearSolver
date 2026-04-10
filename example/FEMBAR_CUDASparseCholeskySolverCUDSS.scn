@@ -1,0 +1,7 @@
+<Node name="root" dt="0.02" gravity="0 -10 0">
+
+    <include href="FEMBAR-common.xml"/>
+
+    <CUDASparseCholeskySolverCUDSS template="CompressedRowSparseMatrixMat3x3d" permutation="METIS"/>
+
+</Node>
